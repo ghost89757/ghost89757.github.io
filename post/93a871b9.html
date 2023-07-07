@@ -1,0 +1,526 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Numpy总结-3.面向数组编程 | catLee的博客小屋</title><meta name="author" content="catLee,2779477538@qq.com"><meta name="copyright" content="catLee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="三. 使用数组进行面向数组编程图床：https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;6DevgOb 向量化：用数组表达式代替显式循环向量化的数组比纯python实现块1到2个数量级 1import numpy as np   123points &#x3D; np.arange(-5, 5, 0.01)xs, ys &#x3D; np.meshgrid(points, points)xs, ys     (array([[-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy总结-3.面向数组编程">
+<meta property="og:url" content="https://ghost89757.github.io/post/93a871b9.html">
+<meta property="og:site_name" content="catLee的博客小屋">
+<meta property="og:description" content="三. 使用数组进行面向数组编程图床：https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;6DevgOb 向量化：用数组表达式代替显式循环向量化的数组比纯python实现块1到2个数量级 1import numpy as np   123points &#x3D; np.arange(-5, 5, 0.01)xs, ys &#x3D; np.meshgrid(points, points)xs, ys     (array([[-">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ghost89757.github.io/img/steam-27.jpg">
+<meta property="article:published_time" content="2023-07-07T09:54:54.000Z">
+<meta property="article:modified_time" content="2023-07-07T10:02:18.795Z">
+<meta property="article:author" content="catLee">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="Numpy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ghost89757.github.io/img/steam-27.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/93a871b9"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Numpy总结-3.面向数组编程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-07 18:02:18'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/steam-27.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">catLee的博客小屋</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Numpy总结-3.面向数组编程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-07T09:54:54.000Z" title="发表于 2023-07-07 17:54:54">2023-07-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-07-07T10:02:18.795Z" title="更新于 2023-07-07 18:02:18">2023-07-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B/Numpy/">Numpy</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Numpy总结-3.面向数组编程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="三-使用数组进行面向数组编程"><a href="#三-使用数组进行面向数组编程" class="headerlink" title="三. 使用数组进行面向数组编程"></a>三. 使用数组进行面向数组编程</h1><p>图床：<a target="_blank" rel="noopener" href="https://imgur.com/a/6DevgOb">https://imgur.com/a/6DevgOb</a></p>
+<p>向量化：用数组表达式代替显式循环<br>向量化的数组比纯python实现块1到2个数量级</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">points = np.arange(-<span class="number">5</span>, <span class="number">5</span>, <span class="number">0.01</span>)</span><br><span class="line">xs, ys = np.meshgrid(points, points)</span><br><span class="line">xs, ys</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([[-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99],
+        [-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99],
+        [-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99],
+        ...,
+        [-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99],
+        [-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99],
+        [-5.  , -4.99, -4.98, ...,  4.97,  4.98,  4.99]]),
+ array([[-5.  , -5.  , -5.  , ..., -5.  , -5.  , -5.  ],
+        [-4.99, -4.99, -4.99, ..., -4.99, -4.99, -4.99],
+        [-4.98, -4.98, -4.98, ..., -4.98, -4.98, -4.98],
+        ...,
+        [ 4.97,  4.97,  4.97, ...,  4.97,  4.97,  4.97],
+        [ 4.98,  4.98,  4.98, ...,  4.98,  4.98,  4.98],
+        [ 4.99,  4.99,  4.99, ...,  4.99,  4.99,  4.99]]))
+</code></pre>
+<p>np.meshgrid()函数：接受两个一维数组，根据两数组的所有（x, y）对生成一个二维矩阵</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">z = np.sqrt(xs ** <span class="number">2</span> + ys ** <span class="number">2</span>)</span><br><span class="line">z</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[7.07106781, 7.06400028, 7.05693985, ..., 7.04988652, 7.05693985,
+        7.06400028],
+       [7.06400028, 7.05692568, 7.04985815, ..., 7.04279774, 7.04985815,
+        7.05692568],
+       [7.05693985, 7.04985815, 7.04278354, ..., 7.03571603, 7.04278354,
+        7.04985815],
+       ...,
+       [7.04988652, 7.04279774, 7.03571603, ..., 7.0286414 , 7.03571603,
+        7.04279774],
+       [7.05693985, 7.04985815, 7.04278354, ..., 7.03571603, 7.04278354,
+        7.04985815],
+       [7.06400028, 7.05692568, 7.04985815, ..., 7.04279774, 7.04985815,
+        7.05692568]])
+</code></pre>
+<p>使用matplotlib生成二维数组的可视化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(z, cmap = plt.cm.gray)</span><br><span class="line">plt.colorbar()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.colorbar.Colorbar at 0x1cf53e64fa0&gt;
+</code></pre>
+<img src = "https://i.imgur.com/UgcSwoK.png" height = '500'>
+    
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plt.title(<span class="string">&quot;Image plot of $\sqrt&#123;x^2 + y^2&#125;$ for a grid of values&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>Text(0.5, 1.0, &#39;Image plot of $\\sqrt&#123;x^2 + y^2&#125;$ for a grid of values&#39;)
+</code></pre>
+<img  src = "https://i.imgur.com/dVbAxe9.png" height = '500'>
+    
+
+
+<h2 id="1-将条件逻辑作为数组操作"><a href="#1-将条件逻辑作为数组操作" class="headerlink" title="1.将条件逻辑作为数组操作"></a>1.将条件逻辑作为数组操作</h2><p>np.where函数是三元表达式x if condition else y的向量化版本</p>
+<p>np.where(c, x, y)：c位三元表达式的条件， 参数x, y可以是标量也可以是向量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成三个数组</span></span><br><span class="line">xarr = np.array([<span class="number">1.1</span>, <span class="number">1.2</span>, <span class="number">1.3</span>, <span class="number">1.4</span>, <span class="number">1.5</span>])</span><br><span class="line">yarr = np.array([<span class="number">2.1</span>, <span class="number">2.2</span>, <span class="number">2.3</span>, <span class="number">1.4</span>, <span class="number">1.5</span>])</span><br><span class="line">cond = np.array([<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">False</span>])</span><br><span class="line">xarr, yarr, cond</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([1.1, 1.2, 1.3, 1.4, 1.5]),
+ array([2.1, 2.2, 2.3, 1.4, 1.5]),
+ array([ True, False,  True,  True, False]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用列表生成式表示三元表达式</span></span><br><span class="line">result = [(x <span class="keyword">if</span> c <span class="keyword">else</span> y) <span class="keyword">for</span> x, y, c <span class="keyword">in</span> <span class="built_in">zip</span>(xarr, yarr, cond)]</span><br><span class="line">result</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[1.1, 2.2, 1.3, 1.4, 1.5]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用np.where()函数表示三元表达式</span></span><br><span class="line">result = np.where(cond, xarr, yarr)</span><br><span class="line">result</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([1.1, 2.2, 1.3, 1.4, 1.5])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成一个随机数组</span></span><br><span class="line">arr = np.random.randn(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-0.29705662, -1.47291579, -0.19306511, -0.14148441],
+       [ 0.44286391,  1.23096973, -0.59317119,  1.30653978],
+       [ 1.84632681,  1.15308967, -0.9625434 ,  0.27338324],
+       [ 0.46436265, -0.06270341,  0.6681147 , -0.91561287]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将arr中的正值换为1，负值换为-1</span></span><br><span class="line">np.where(arr &gt; <span class="number">0</span>, <span class="number">1</span>, -<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-1, -1, -1, -1],
+       [ 1,  1, -1,  1],
+       [ 1,  1, -1,  1],
+       [ 1, -1,  1, -1]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将arr中的正值换为1，负值不变</span></span><br><span class="line">np.where(arr &gt; <span class="number">0</span>, <span class="number">1</span>, arr)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-0.29705662, -1.47291579, -0.19306511, -0.14148441],
+       [ 1.        ,  1.        , -0.59317119,  1.        ],
+       [ 1.        ,  1.        , -0.9625434 ,  1.        ],
+       [ 1.        , -0.06270341,  1.        , -0.91561287]])
+</code></pre>
+<h2 id="2-数学和统计方法"><a href="#2-数学和统计方法" class="headerlink" title="2.数学和统计方法"></a>2.数学和统计方法</h2><p>基础数组统计方法：</p>
+<ul>
+<li>sum </li>
+<li>mean</li>
+<li>std, var 标准差和方差</li>
+<li>min, max</li>
+<li>argmin, argmax 最小和最大值的位置</li>
+<li>cumsum 从0开始元素累计和</li>
+<li>cumprod 从1开始元素累计积</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">5</span>, <span class="number">4</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-0.89140742, -0.91829468,  0.50639058, -0.10887634],
+       [ 2.02055891, -0.11030976, -0.17966295,  0.4986754 ],
+       [-0.34264166,  0.58986109, -0.00333274,  0.17105851],
+       [ 0.24917066,  0.68665224,  0.45479296, -0.84538222],
+       [ 0.35519886, -2.38810805,  1.67373213,  0.93711896]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.mean(), np.mean(arr)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(0.11775972427084694, 0.11775972427084694)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.<span class="built_in">sum</span>(), np.<span class="built_in">sum</span>(arr)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(2.3551944854169387, 2.3551944854169387)
+</code></pre>
+<p>像sum, mean, std等函数位聚合函数，有可选参数axis，axis &#x3D; 0沿行轴， axis &#x3D; 1沿列轴</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.mean(axis = <span class="number">0</span>), arr.mean(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([ 0.27817587, -0.42803983,  0.490384  ,  0.13051886]),
+ array([ 0.27817587, -0.42803983,  0.490384  ,  0.13051886]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.<span class="built_in">sum</span>(axis = <span class="number">1</span>), arr.<span class="built_in">sum</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([-1.41218786,  2.2292616 ,  0.4149452 ,  0.54523365,  0.57794189]),
+ array([-1.41218786,  2.2292616 ,  0.4149452 ,  0.54523365,  0.57794189]))
+</code></pre>
+<p>像cumsum, cumprod等函数不聚合，产生一个中间结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.arange(<span class="number">7</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([0, 1, 2, 3, 4, 5, 6])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.cumsum(), arr.cumprod()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([ 0,  1,  3,  6, 10, 15, 21]), array([0, 0, 0, 0, 0, 0, 0]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>, <span class="number">3</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[0, 1, 2],
+       [3, 4, 5],
+       [6, 7, 8]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.cumsum(axis = <span class="number">0</span>), arr.cumprod(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([[ 0,  1,  2],
+        [ 3,  5,  7],
+        [ 9, 12, 15]]),
+ array([[  0,   0,   0],
+        [  3,  12,  60],
+        [  6,  42, 336]]))
+</code></pre>
+<h2 id="3-布尔值数组的方法"><a href="#3-布尔值数组的方法" class="headerlink" title="3.布尔值数组的方法"></a>3.布尔值数组的方法</h2><p>用sum计算数组中位True的元素的个数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">100</span>)</span><br><span class="line">(arr &gt; <span class="number">0</span>).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>55
+</code></pre>
+<p>对于布尔值数组，有两个有用的方法</p>
+<p>any：检查数组中是否至少有一个True</p>
+<p>all：检查数组中是否都是True</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bools = np.array([<span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>])</span><br><span class="line">bools.<span class="built_in">any</span>(), bools.<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(True, False)
+</code></pre>
+<h2 id="4-排序"><a href="#4-排序" class="headerlink" title="4.排序"></a>4.排序</h2><p>Numpy数组可以使用sort方法按位置排序</p>
+<p>使用.sort()将对原数组进行排序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">6</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([ 0.57008431, -1.30450721,  0.81329131, -0.91295708,  0.48338523,
+        0.76207039])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr.sort()</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([-1.30450721, -0.91295708,  0.48338523,  0.57008431,  0.76207039,
+        0.81329131])
+</code></pre>
+<p>可以定轴排序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">5</span>, <span class="number">4</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[ 0.60082999,  1.94270172,  0.71291577, -2.01827154],
+       [-1.47569078,  0.69923044,  0.42516866, -0.02469715],
+       [ 0.60926051,  0.2270716 ,  0.64116328,  0.88991252],
+       [ 0.91902631, -0.06774428,  0.89945715,  1.2079424 ],
+       [ 0.30472199, -0.99106537,  0.02111367, -0.71498387]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr.sort(<span class="number">0</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-1.47569078, -0.99106537,  0.02111367, -2.01827154],
+       [ 0.30472199, -0.06774428,  0.42516866, -0.71498387],
+       [ 0.60082999,  0.2270716 ,  0.64116328, -0.02469715],
+       [ 0.60926051,  0.69923044,  0.71291577,  0.88991252],
+       [ 0.91902631,  1.94270172,  0.89945715,  1.2079424 ]])
+</code></pre>
+<p>使用np.sort()返回排序后的数组拷贝</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.random.randn(<span class="number">5</span>, <span class="number">4</span>)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[ 0.07889595,  0.2854413 , -0.62153392,  0.77695739],
+       [-1.25040776, -1.04057479, -0.15433813,  0.35203704],
+       [-0.20265468, -0.79718878,  1.90508948,  0.94735928],
+       [ 0.47821481, -0.47164527,  0.17121263,  0.06215763],
+       [ 0.1758879 ,  2.05560968, -0.18756019, -1.80124443]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_sort = np.sort(arr)</span><br><span class="line">arr_sort, arr</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([[-0.62153392,  0.07889595,  0.2854413 ,  0.77695739],
+        [-1.25040776, -1.04057479, -0.15433813,  0.35203704],
+        [-0.79718878, -0.20265468,  0.94735928,  1.90508948],
+        [-0.47164527,  0.06215763,  0.17121263,  0.47821481],
+        [-1.80124443, -0.18756019,  0.1758879 ,  2.05560968]]),
+ array([[ 0.07889595,  0.2854413 , -0.62153392,  0.77695739],
+        [-1.25040776, -1.04057479, -0.15433813,  0.35203704],
+        [-0.20265468, -0.79718878,  1.90508948,  0.94735928],
+        [ 0.47821481, -0.47164527,  0.17121263,  0.06215763],
+        [ 0.1758879 ,  2.05560968, -0.18756019, -1.80124443]]))
+</code></pre>
+<h2 id="5-唯一值与其他集合逻辑"><a href="#5-唯一值与其他集合逻辑" class="headerlink" title="5.唯一值与其他集合逻辑"></a>5.唯一值与其他集合逻辑</h2><p>常见的数组集合操作：</p>
+<ul>
+<li>unique(x) 计算x唯一值，并排序</li>
+<li>in1d(x, y) 计算x中的元素是否在y中</li>
+<li>intersect1d(x, y) 取交集，并排序</li>
+<li>union1d(x, y) 取并集，并排序</li>
+<li>setdiff1d(x, y) 去差集，在x中但不在y中的元素</li>
+<li>setxor1d(x, y)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ints = np.array([<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># np.unique()</span></span><br><span class="line">np.unique(ints), ints</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(array([1, 2, 3, 4]), array([3, 3, 3, 2, 2, 1, 1, 4, 4]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">values = np.array([<span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.in1d(values, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([ True, False, False,  True,  True, False,  True])
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">catLee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/93a871b9.html">https://ghost89757.github.io/post/93a871b9.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">catLee的博客小屋</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a><a class="post-meta__tags" href="/tags/python/">python</a><a class="post-meta__tags" href="/tags/Numpy/">Numpy</a></div><div class="post_share"><div class="social-share" data-image="/img/steam-27.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/5140763b.html"><img class="prev-cover" src="/img/%E9%A3%8E%E6%99%AF-5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Numpy总结-4.用数组进行文件输入输出</div></div></a></div><div class="next-post pull-right"><a href="/post/2bc0248d.html"><img class="next-cover" src="/img/p11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Numpy总结-2.通用函数</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/f4aaaaf3.html" title="Numpy总结-1.Numpy ndaay"><img class="cover" src="/img/%E9%A3%8E%E6%99%AF-5.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-07</div><div class="title">Numpy总结-1.Numpy ndaay</div></div></a></div><div><a href="/post/2bc0248d.html" title="Numpy总结-2.通用函数"><img class="cover" src="/img/p11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-07</div><div class="title">Numpy总结-2.通用函数</div></div></a></div><div><a href="/post/5140763b.html" title="Numpy总结-4.用数组进行文件输入输出"><img class="cover" src="/img/%E9%A3%8E%E6%99%AF-5.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-07</div><div class="title">Numpy总结-4.用数组进行文件输入输出</div></div></a></div><div><a href="/post/c2047baa.html" title="Numpy总结-5.线性代数"><img class="cover" src="/img/p11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-07</div><div class="title">Numpy总结-5.线性代数</div></div></a></div><div><a href="/post/4269cbfe.html" title="Numpy总结-6.伪随机函数的生成"><img class="cover" src="/img/steam-13.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-07</div><div class="title">Numpy总结-6.伪随机函数的生成</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">catLee</div><div class="author-info__description">且视他人之凝目如盏盏鬼火，大胆走你的夜路</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E4%BD%BF%E7%94%A8%E6%95%B0%E7%BB%84%E8%BF%9B%E8%A1%8C%E9%9D%A2%E5%90%91%E6%95%B0%E7%BB%84%E7%BC%96%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">三. 使用数组进行面向数组编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B0%86%E6%9D%A1%E4%BB%B6%E9%80%BB%E8%BE%91%E4%BD%9C%E4%B8%BA%E6%95%B0%E7%BB%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.将条件逻辑作为数组操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B0%E5%AD%A6%E5%92%8C%E7%BB%9F%E8%AE%A1%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">2.数学和统计方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B8%83%E5%B0%94%E5%80%BC%E6%95%B0%E7%BB%84%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">3.布尔值数组的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8E%92%E5%BA%8F"><span class="toc-number">1.4.</span> <span class="toc-text">4.排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%94%AF%E4%B8%80%E5%80%BC%E4%B8%8E%E5%85%B6%E4%BB%96%E9%9B%86%E5%90%88%E9%80%BB%E8%BE%91"><span class="toc-number">1.5.</span> <span class="toc-text">5.唯一值与其他集合逻辑</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/4269cbfe.html" title="Numpy总结-6.伪随机函数的生成"><img src="/img/steam-13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Numpy总结-6.伪随机函数的生成"/></a><div class="content"><a class="title" href="/post/4269cbfe.html" title="Numpy总结-6.伪随机函数的生成">Numpy总结-6.伪随机函数的生成</a><time datetime="2023-07-07T09:56:30.000Z" title="发表于 2023-07-07 17:56:30">2023-07-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/c2047baa.html" title="Numpy总结-5.线性代数"><img src="/img/p11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Numpy总结-5.线性代数"/></a><div class="content"><a class="title" href="/post/c2047baa.html" title="Numpy总结-5.线性代数">Numpy总结-5.线性代数</a><time datetime="2023-07-07T09:55:49.000Z" title="发表于 2023-07-07 17:55:49">2023-07-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/5140763b.html" title="Numpy总结-4.用数组进行文件输入输出"><img src="/img/%E9%A3%8E%E6%99%AF-5.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Numpy总结-4.用数组进行文件输入输出"/></a><div class="content"><a class="title" href="/post/5140763b.html" title="Numpy总结-4.用数组进行文件输入输出">Numpy总结-4.用数组进行文件输入输出</a><time datetime="2023-07-07T09:55:23.000Z" title="发表于 2023-07-07 17:55:23">2023-07-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/93a871b9.html" title="Numpy总结-3.面向数组编程"><img src="/img/steam-27.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Numpy总结-3.面向数组编程"/></a><div class="content"><a class="title" href="/post/93a871b9.html" title="Numpy总结-3.面向数组编程">Numpy总结-3.面向数组编程</a><time datetime="2023-07-07T09:54:54.000Z" title="发表于 2023-07-07 17:54:54">2023-07-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2bc0248d.html" title="Numpy总结-2.通用函数"><img src="/img/p11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Numpy总结-2.通用函数"/></a><div class="content"><a class="title" href="/post/2bc0248d.html" title="Numpy总结-2.通用函数">Numpy总结-2.通用函数</a><time datetime="2023-07-07T09:54:05.000Z" title="发表于 2023-07-07 17:54:05">2023-07-07</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By catLee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
