@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Transformer | catLee的博客小屋</title><meta name="author" content="catLee,2779477538@qq.com"><meta name="copyright" content="catLee"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="图床：https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;Ae6T9zo （看不到图片，可能是网络原因） 一 前言RNN在机器翻译时，用于其顺序结构的影响，无法有效地联系前后文，并快速准确地进行翻译；由此，Attention机制被提出，有效地联系到了上下文，考虑到了全局地信息。 既然如此，何不舍弃RNN结构，用Attenion机制构造新的模型。于是，随着Google一篇名为《Attention is All">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transformer">
+<meta property="og:url" content="https://ghost89757.github.io/post/e0d2147a.html">
+<meta property="og:site_name" content="catLee的博客小屋">
+<meta property="og:description" content="图床：https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;Ae6T9zo （看不到图片，可能是网络原因） 一 前言RNN在机器翻译时，用于其顺序结构的影响，无法有效地联系前后文，并快速准确地进行翻译；由此，Attention机制被提出，有效地联系到了上下文，考虑到了全局地信息。 既然如此，何不舍弃RNN结构，用Attenion机制构造新的模型。于是，随着Google一篇名为《Attention is All">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ghost89757.github.io/img/p7.jpg">
+<meta property="article:published_time" content="2023-07-12T01:05:43.000Z">
+<meta property="article:modified_time" content="2023-07-12T01:19:51.562Z">
+<meta property="article:author" content="catLee">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Transformer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ghost89757.github.io/img/p7.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/e0d2147a"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Transformer',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-12 09:19:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/p7.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">catLee的博客小屋</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Transformer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-12T01:05:43.000Z" title="发表于 2023-07-12 09:05:43">2023-07-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-07-12T01:19:51.562Z" title="更新于 2023-07-12 09:19:51">2023-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/">注意力机制</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Transformer"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>图床：<a target="_blank" rel="noopener" href="https://imgur.com/a/Ae6T9zo">https://imgur.com/a/Ae6T9zo</a></p>
+<p>（看不到图片，可能是网络原因）</p>
+<h2 id="一-前言"><a href="#一-前言" class="headerlink" title="一 前言"></a>一 前言</h2><p>RNN在机器翻译时，用于其顺序结构的影响，无法有效地联系前后文，并快速准确地进行翻译；由此，Attention机制被提出，有效地联系到了上下文，考虑到了全局地信息。</p>
+<p>既然如此，何不舍弃RNN结构，用Attenion机制构造新的模型。于是，随着Google一篇名为《Attention is All you need》的论文，Transfoemer架构横空出世。</p>
+<p>首先，我们给出Transformer结构的原图：</p>
+<img src="https://i.imgur.com/wHnWrvu.png" alt="img" style="zoom:50%;" />
+
+<p>乍一看，甚是懵逼，所以，我们进行一个剖析。</p>
+<img src="https://i.imgur.com/crsxGZl.png" alt="屏幕截图 2023-04-10 210049" style="zoom: 25%;" />
+
+<p>起初，Tansformer就像一个黑盒，输入中文”人工智能”输出英文”Artificial Intelligence”。</p>
+<img src="https://i.imgur.com/twEF7S4.png" alt="屏幕截图 2023-04-10 210118" style="zoom: 25%;" />
+
+<p>细看，Tansformer由两个部分组成，即编码器和解码器。</p>
+<img src="https://i.imgur.com/vWAAVYU.png" alt="屏幕截图 2023-04-10 210152" style="zoom:25%;" />
+
+<p>实验中，编码器部分有6个编码器，解码器部分有6个解码器。</p>
+<img src="https://i.imgur.com/EruikAJ.png" alt="屏幕截图 2023-04-10 210432" style="zoom: 25%;" />
+
+<p>我们看每一个编码器，它由Multi-Head Attention和前馈网络两部分组成。</p>
+<p>再看每一个编码器，它由Multi-Head Attention和Encoder-Decoder Attention和前馈网络三部分组成。</p>
+<p>以上，就是Tansformer结构的宏观概述。</p>
+<h2 id="二-输入部分"><a href="#二-输入部分" class="headerlink" title="二 输入部分"></a>二 输入部分</h2><p>我们知道，由于RNN的结构使得输入序列的时序信息得到了很好的体现，然而Transformer是完全根据Attention机制来的，所以无法很好的体现输入序列的时序信息，所以我们在输入向量的基础上加入了位置编码，使得输入序列的时序信息能够体现出来，便于上下文的理解。</p>
+<img src="https://i.imgur.com/OxDbp4e.png" alt="屏幕截图 2023-04-11 151746" style="zoom: 33%;" />
+
+<h2 id="三-编码器部分"><a href="#三-编码器部分" class="headerlink" title="三 编码器部分"></a>三 编码器部分</h2><h3 id="3-2-Multi-Head-Attention"><a href="#3-2-Multi-Head-Attention" class="headerlink" title="3.2 Multi-Head Attention"></a>3.2 Multi-Head Attention</h3><h4 id="3-2-1-Self-Attention"><a href="#3-2-1-Self-Attention" class="headerlink" title="3.2.1 Self-Attention"></a>3.2.1 Self-Attention</h4><p>Attention机制本质上就是通过加权求和，获得对上下文的感知。</p>
+<img src="https://i.imgur.com/ua1GPH8.png" alt="img" style="zoom:80%;" />
+
+<p>我们首先给出Self-Attention的结构。</p>
+<p>具体流程如下：</p>
+<ul>
+<li>由同一输入得到三个矩阵Q-Query，Key-K，V-Value</li>
+<li>Q与K进行矩阵的点乘，计算相关性</li>
+<li>进行尺度收缩，除以尺度标度S</li>
+<li>通过Softmax将结果归一化为概率分布</li>
+<li>乘以矩阵V权重求和得到Attention</li>
+</ul>
+<p>公式表示为：<br>$$<br>Attention(Q,K,V) &#x3D; softmax(\frac{QK^T}{\sqrt{d_k}})V<br>$$<br>下面，我们看个具体的例子：</p>
+<img src="https://i.imgur.com/WFl2qp2.png" alt="img" style="zoom: 80%;" />
+
+<p>如图，我们输入”Thinking Machines”，其中Thinking转换为向量x1，Machines转换为向量x2。</p>
+<p>当我们处理单词”Thinking”时，q1，k1，v1，分别对应Query，Key，Value向量，首先用q1与所有单词进行相关性计算，q1分别与k1 ，k2进行点乘，得到相关性值分别为112，96，然后进行尺度收缩除以8，得到14，12，然后通过softmax函数得到概率分布0.88和0.12，最后概率分布与Value向量相乘得到Attention序列Z1。</p>
+<p>将所有的输入合并为一个矩阵，其对应的Q，K，V也为矩阵。</p>
+<img src="https://i.imgur.com/0tJiSIC.png" alt="img" style="zoom: 80%;" />
+
+<p>其中，$W^Q,W^K,W^V$是训练的参数矩阵，输入矩阵通过这三个矩阵得到对应的Q，K，V。</p>
+<p>公式化有：<img src="https://i.imgur.com/d1wGM6K.png" alt="img" style="zoom:80%;" /></p>
+<p>总之，我们使用Self-Attention机制经过了一系列矩阵运算，实现了单词之间的权重求和。</p>
+<h4 id="3-2-2-Multi-Head-Attention"><a href="#3-2-2-Multi-Head-Attention" class="headerlink" title="3.2.2 Multi-Head Attention"></a>3.2.2 Multi-Head Attention</h4><p>在上文中，我们提到了对于一个输入矩阵X，我们让其与训练过的矩阵 $W^Q,W^K,W^V$进行点乘，最终得到矩阵Q，K，V。</p>
+<p>现在，我们的有多组训练过的矩阵 $W_0^Q,W_0^K,W_0^V;W_1^Q,W_1^K,W_1^V;…W_n^Q,W_n^K,W_n^K$ 与输入矩阵X进行点乘，得到多组矩阵 $Q_0,K_0,V_0;Q_1,K_1,V_1;…Q_n,K_n,V_n$ ，这就是Multi-Head Attention。</p>
+<p>Multi-Head Attention其实就是多个Self-Attention的结合，每个Head的Attention侧重点不同，增强了上下文的感知，也可以消除Q，K，V初始值的影响。</p>
+<img src="https://i.imgur.com/9OyXq2V.png" alt="img" style="zoom: 80%;" />
+
+<p>如图这就是一个8Head的Multi-Head Attention，我们让输入矩阵X经过不同的8组权重矩阵，得到8组不同的矩阵Q，K，V然后经过 $softmax(\frac{QK^T}{\sqrt{d_k}})$ 操作，最终得到编入了上下文信息的矩阵Z。</p>
+<h4 id="3-2-3-Add-amp-Norm"><a href="#3-2-3-Add-amp-Norm" class="headerlink" title="3.2.3 Add&amp;Norm"></a>3.2.3 Add&amp;Norm</h4><img src="https://i.imgur.com/4QGes5d.png" alt="img" style="zoom:50%;" />
+
+<p>看Transformer的结构图，不难发现，输入进入编码器的Multi-Head Attention部分后，并没有直接进入前馈神经网络中，而是进入了Add &amp; Norm部分。</p>
+<h5 id="3-2-3-1-残差神经网络"><a href="#3-2-3-1-残差神经网络" class="headerlink" title="3.2.3.1 残差神经网络"></a>3.2.3.1 残差神经网络</h5><p>Add的意思是在输入Z的基础上加入了一个残差块，加入这个残差快可以解决网络退化的问题。</p>
+<ul>
+<li>神经网络的退化：深度神经网络通过增加网络的层数，Loss逐渐减小，然后趋于稳定达到饱和，然后再继续增加网络层数，Loss反而增大。</li>
+</ul>
+<p>由神经网络的退化我们知道，神经网络层数不是越大越好的，而是由固定的层数，超过该层数，神将网络退化。在具体的训练网络时，我们不知道最优的网络层数是多少，所以一般网络层数会比较大，在优化是，网络中就多了一部分层是多余的，对于这些多余的层，我们希望它们的输入和输出一样，即恒等映射，以达到最优层数。这时，就需要引入残差快。</p>
+<img src="https://i.imgur.com/ScWkDaA.png" alt="在这里插入图片描述" style="zoom:80%;" />
+
+<p>如图所示，这就是一个残差块的结构，其中x经过第一层权重，再经过激活函数，输出了F(x)，然后进入第二层权重之后，经过激活函数之前，我们让F(x) + x，这样经过激活函数之后，我们的输出H(x)就变为了H(x) &#x3D; F(x) + x，我们的目的是恒等映射，所以只需要让F(x) &#x3D; 0就行了，这时输出就是H(x) &#x3D; x。</p>
+<p>这个设计十分巧妙，要使输入输入等于输出，我们有两种方法，一种使通过改变权重，使得输入输出相同，但是我们知道训练权重的过程很复杂，不是我们很简单就能改变的；相比之下，第二种方法就显得十分巧妙，加入残差快使F(x) &#x3D; 0，我们只需要给权重赋很小的值，就可以实现输出接近0。</p>
+<p>所以说Add并不是Multi-Head Attention的输出Z进入了新的网络中，而是在Multi-Head Attenion中引入了残差块，让Multi-Head Attention的输入X加入，如果我们这一层Multi-Head Attention是多余的，就可以使用残差块来使该层进行恒等映射。</p>
+<h5 id="3-2-3-2-Norm"><a href="#3-2-3-2-Norm" class="headerlink" title="3.2.3.2 Norm"></a>3.2.3.2 Norm</h5><p>Norm就是Normalize的意思，神经网络在训练的过程中，上层的输出使下层的输入，所以当上层的参数改变时，下层也会受到印象，所以在Multi-Head Attention的输出Z进入全连接神经网络之前，我们想对神经网络的输入进行归一化，保证训练的稳定性。</p>
+<p>Add &amp; Norm的部分，可以参考下图：</p>
+<img src="https://i.imgur.com/Byy9dtG.png" alt="img" style="zoom:80%;" />
+
+<h4 id="3-2-4-前馈网络"><a href="#3-2-4-前馈网络" class="headerlink" title="3.2.4 前馈网络"></a>3.2.4 前馈网络</h4><p>在归一化后，数据进入前馈网络，其实就是一个MLP全连接网络，公式如下：<br>$$<br>FFN(x) &#x3D; max(0,X_1W + b_1)W_2 + b_2<br>$$<br>不难看出，这里的FFN有三层，第一层是线性变换，第二层是ReLu激活函数非线性变换，第三层是线性变换。输入Z与FFN(Z)相比，维度不变。</p>
+<p>在编码器部分，经过六层的编码器，最终输出了带有上下文信息的矩阵K，V。</p>
+<h2 id="四-解码器部分"><a href="#四-解码器部分" class="headerlink" title="四 解码器部分"></a>四 解码器部分</h2><p>解码器部分与编码器部分类似，不同的地方有两点。</p>
+<h3 id="4-1-Masked-Multi-Head-Attention"><a href="#4-1-Masked-Multi-Head-Attention" class="headerlink" title="4.1 Masked Multi-Head Attention"></a>4.1 Masked Multi-Head Attention</h3><p>与Encoder中的Multi-Head Attention中的原理一样，只是多了一个Mask。</p>
+<p>这里的Mask，指的是掩码。我们知道，输入的数据是单词经过编码的序列，掩码就是掩盖其中一写编码。掩盖哪些呢？</p>
+<ul>
+<li>padding mask：我们输入的序列不一定长度相等，为了使序列对齐，我们将较短的补零，并对补零的部分掩盖，防止注意力放在这些补零的部分。如果有序列过长，我们也会将将多余的部分舍弃。</li>
+<li>sequence mask：由于我们不像RNN那样按顺序一个一个输入，而是将输入加上位置信息全部同时输入，所以在解码时，我们会看到t时刻之后的内容，这里我们就需要进行sequence mask来将t时刻后的内用掩盖。</li>
+</ul>
+<h3 id="4-2-Encoder-Decoder-Multi-Head-Attention"><a href="#4-2-Encoder-Decoder-Multi-Head-Attention" class="headerlink" title="4.2 Encoder-Decoder Multi-Head Attention"></a>4.2 Encoder-Decoder Multi-Head Attention</h3><p>上文中提到，Encoder中的Multi-Head Attention是基于Self-Attention机制，而Decoder中的Muti-Head Attention就是单纯的Attention机制，它的k，v来自于编码器的输出，Q来自于Masked Multi-Head Attention中的输出。</p>
+<h2 id="五-输出部分"><a href="#五-输出部分" class="headerlink" title="五 输出部分"></a>五 输出部分</h2><img src="https://i.imgur.com/XSzNeVi.png" alt="在这里插入图片描述" style="zoom:60%;" />
+
+<p>如图，输出部分很简单，经过一次线性变换，然后经过softmax函数，最终输出可能翻译出单词的概率。</p>
+<h2 id="六-优缺点"><a href="#六-优缺点" class="headerlink" title="六 优缺点"></a>六 优缺点</h2><p>优点：</p>
+<ul>
+<li>效果好</li>
+<li>可以并行训练，速度快</li>
+<li>很好解决了长距离依赖的问题</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>完全基于Self-Attention，对于词语位置之间的信息有一定的丢失，虽然加入了positional encoding来解决这个问题，但也存在可以优化的问题。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">catLee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/e0d2147a.html">https://ghost89757.github.io/post/e0d2147a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">catLee的博客小屋</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/Transformer/">Transformer</a></div><div class="post_share"><div class="social-share" data-image="/img/p7.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/89b2e373.html"><img class="next-cover" src="/img/steam-27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Attention：注意力机制</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/1ab40edc.html" title="3D Conv:立体卷积"><img class="cover" src="/img/p11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">3D Conv:立体卷积</div></div></a></div><div><a href="/post/154c7ef1.html" title="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer"><img class="cover" src="/img/p15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-08</div><div class="title">3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer</div></div></a></div><div><a href="/post/89b2e373.html" title="Attention：注意力机制"><img class="cover" src="/img/steam-27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">Attention：注意力机制</div></div></a></div><div><a href="/post/e1675ab9.html" title="RNN:循环神经网络"><img class="cover" src="/img/p16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">RNN:循环神经网络</div></div></a></div><div><a href="/post/37a338a6.html" title="U-Net总结"><img class="cover" src="/img/p13.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-03</div><div class="title">U-Net总结</div></div></a></div><div><a href="/post/a37e7948.html" title="DCA：领域自适应遥感图像分割的深度协方差对齐"><img class="cover" src="/img/%E9%A3%8E%E6%99%AF-5.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-06</div><div class="title">DCA：领域自适应遥感图像分割的深度协方差对齐</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">catLee</div><div class="author-info__description">且视他人之凝目如盏盏鬼火，大胆走你的夜路</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E8%BE%93%E5%85%A5%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">二 输入部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E7%BC%96%E7%A0%81%E5%99%A8%E9%83%A8%E5%88%86"><span class="toc-number">3.</span> <span class="toc-text">三 编码器部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Multi-Head-Attention"><span class="toc-number">3.1.</span> <span class="toc-text">3.2 Multi-Head Attention</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-Self-Attention"><span class="toc-number">3.1.1.</span> <span class="toc-text">3.2.1 Self-Attention</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-Multi-Head-Attention"><span class="toc-number">3.1.2.</span> <span class="toc-text">3.2.2 Multi-Head Attention</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-Add-amp-Norm"><span class="toc-number">3.1.3.</span> <span class="toc-text">3.2.3 Add&amp;Norm</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-3-1-%E6%AE%8B%E5%B7%AE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">3.2.3.1 残差神经网络</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-3-2-Norm"><span class="toc-number">3.1.3.2.</span> <span class="toc-text">3.2.3.2 Norm</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C"><span class="toc-number">3.1.4.</span> <span class="toc-text">3.2.4 前馈网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E8%A7%A3%E7%A0%81%E5%99%A8%E9%83%A8%E5%88%86"><span class="toc-number">4.</span> <span class="toc-text">四 解码器部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-Masked-Multi-Head-Attention"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 Masked Multi-Head Attention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Encoder-Decoder-Multi-Head-Attention"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 Encoder-Decoder Multi-Head Attention</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E8%BE%93%E5%87%BA%E9%83%A8%E5%88%86"><span class="toc-number">5.</span> <span class="toc-text">五 输出部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">6.</span> <span class="toc-text">六 优缺点</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/e0d2147a.html" title="Transformer"><img src="/img/p7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer"/></a><div class="content"><a class="title" href="/post/e0d2147a.html" title="Transformer">Transformer</a><time datetime="2023-07-12T01:05:43.000Z" title="发表于 2023-07-12 09:05:43">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/89b2e373.html" title="Attention：注意力机制"><img src="/img/steam-27.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Attention：注意力机制"/></a><div class="content"><a class="title" href="/post/89b2e373.html" title="Attention：注意力机制">Attention：注意力机制</a><time datetime="2023-07-12T00:47:35.000Z" title="发表于 2023-07-12 08:47:35">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/1ab40edc.html" title="3D Conv:立体卷积"><img src="/img/p11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="3D Conv:立体卷积"/></a><div class="content"><a class="title" href="/post/1ab40edc.html" title="3D Conv:立体卷积">3D Conv:立体卷积</a><time datetime="2023-07-11T14:01:28.000Z" title="发表于 2023-07-11 22:01:28">2023-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/e1675ab9.html" title="RNN:循环神经网络"><img src="/img/p16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RNN:循环神经网络"/></a><div class="content"><a class="title" href="/post/e1675ab9.html" title="RNN:循环神经网络">RNN:循环神经网络</a><time datetime="2023-07-11T13:53:21.000Z" title="发表于 2023-07-11 21:53:21">2023-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/154c7ef1.html" title="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer"><img src="/img/p15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer"/></a><div class="content"><a class="title" href="/post/154c7ef1.html" title="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer">3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer</a><time datetime="2023-07-08T02:39:36.000Z" title="发表于 2023-07-08 10:39:36">2023-07-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By catLee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
