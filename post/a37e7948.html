@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>DCA：领域自适应遥感图像分割的深度协方差对齐 | Ghost89757</title><meta name="author" content="Ghost89757,2779477538@qq.com"><meta name="copyright" content="Ghost89757"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="图床：  https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;IGStCio https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;UdeeJ5z https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;e0SvrAj  （看不到图片，可能是你的网络没用魔法）    题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>DCA：领域自适应遥感图像分割的深度协方差对齐 | Ghost89757</title><meta name="author" content="Ghost89757,2779477538@qq.com"><meta name="copyright" content="Ghost89757"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="图床：  https://imgur.com/a/IGStCio https://imgur.com/a/UdeeJ5z https://imgur.com/a/e0SvrAj  （看不到图片，可能是你的网络没用魔法）    题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DCA：领域自适应遥感图像分割的深度协方差对齐">
 <meta property="og:url" content="https://ghost89757.github.io/post/a37e7948.html">
 <meta property="og:site_name" content="Ghost89757">
-<meta property="og:description" content="图床：  https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;IGStCio https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;UdeeJ5z https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;e0SvrAj  （看不到图片，可能是你的网络没用魔法）    题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域">
+<meta property="og:description" content="图床：  https://imgur.com/a/IGStCio https://imgur.com/a/UdeeJ5z https://imgur.com/a/e0SvrAj  （看不到图片，可能是你的网络没用魔法）    题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ghost89757.github.io/img/p12.jpg">
+<meta property="og:image" content="https://ghost89757.github.io/img/p9.jpg">
 <meta property="article:published_time" content="2023-07-06T09:21:32.000Z">
 <meta property="article:modified_time" content="2023-09-19T10:56:49.192Z">
 <meta property="article:author" content="Ghost89757">
@@ -13,7 +13,7 @@
 <meta property="article:tag" content="图像分割">
 <meta property="article:tag" content="无监督领域自适应">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ghost89757.github.io/img/p12.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/a37e7948"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://ghost89757.github.io/img/p9.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/a37e7948"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: undefined,
@@ -144,14 +144,30 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/p12.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ghost89757</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">DCA：领域自适应遥感图像分割的深度协方差对齐</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-06T09:21:32.000Z" title="发表于 2023-07-06 17:21:32">2023-07-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-19T10:56:49.192Z" title="更新于 2023-09-19 18:56:49">2023-09-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>图床：</p>
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><link rel="stylesheet" href="/css/modify.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/p9.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ghost89757</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">DCA：领域自适应遥感图像分割的深度协方差对齐</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-06T09:21:32.000Z" title="发表于 2023-07-06 17:21:32">2023-07-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-19T10:56:49.192Z" title="更新于 2023-09-19 18:56:49">2023-09-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="DCA：领域自适应遥感图像分割的深度协方差对齐"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url('/img/p9.jpg');"></div><article class="post-content" id="article-container"><p>图床：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://imgur.com/a/IGStCio">https://imgur.com/a/IGStCio</a></li>
 <li><a target="_blank" rel="noopener" href="https://imgur.com/a/UdeeJ5z">https://imgur.com/a/UdeeJ5z</a></li>
 <li><a target="_blank" rel="noopener" href="https://imgur.com/a/e0SvrAj">https://imgur.com/a/e0SvrAj</a></li>
 </ul>
 <p>（看不到图片，可能是你的网络没用魔法）</p>
-<img src = "https://i.imgur.com/8ype1WY.png">
+<img src="https://i.imgur.com/8ype1WY.png">
 
 <ul>
 <li><p>题目：《Deep Covariance Alignment for Domain Adaptive Remote Sensing Image Segmentation》（领域域自适应遥感图像分割的深度协方差对齐）</p>
@@ -161,7 +177,7 @@
 <li><p>数据集：LoveDA dataset</p>
 </li>
 </ul>
-<img src="https://i.imgur.com/a6DyIdi.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/a6DyIdi.png" style="zoom:50%;">
 
 <ul>
 <li><p><strong>Abstract</strong>-无监督领域自适应（UDA）图像分割备受关注，其旨在提升从源域到目标域知识迁移的泛化能力。</p>
@@ -175,7 +191,7 @@
 <h2 id="I-INTRODUCTION"><a href="#I-INTRODUCTION" class="headerlink" title="I. INTRODUCTION"></a>I. INTRODUCTION</h2><p>遥感图像分割（RSI segmentation: remote sensing image segmentation）旨在为图像的每一个像素分配一个响应的土地覆盖类型，这在许多应用上都有重要意义。然而，对标签训练样本的大量需求和地理区域之间的差异严重限制了遥感图像分割的发展。对于数据的缺失和差异，一种常见的解决方法是无监督领域自适应（UDA：unsupervised domain adaptive）。</p>
 <p>随着基于深度卷积网络的语义分割方法的成功，UDA segmentation得到了快速发展，相关的UDA segmentaiton大致可以分为两类：对抗训练（AT:adversarial traing）方法和自训练（ST）方法。AT的大部分方法都是基于生成对抗网络（GAN:generative adversarial network ），很难训练。ST常采用由粗到细的工作方式，用阶梯机制来训练。</p>
 <p>目前，大部分用于RSI segmentation的方法属于ST方法，然而很少一部分不错的成果，但这些方法的进展仍然被限制，原因如下：1.遥感图像中，不同地理区域的相同类别的土地覆盖特征不同。如下图（a）所示，乡村(rural)和城市(urban)的相同类别存在较大差异。2.遥感图像中的类别分布不一致，如下图（b）所示。这使提高模型的泛化能力困难加大。</p>
-<img src="https://i.imgur.com/ZrdMkQk.png" style="zoom:80%;" />
+<img src="https://i.imgur.com/ZrdMkQk.png" style="zoom:80%;">
 
 <p>为了解决这个问题，一个方向是对齐两个不同域的类别特征。前人提出了一些方法，但是这仍然存在问题：1.两个不同域的大的类内差异和不一致的类分布会严重影响不同类别特征的距离的计算。2.当同时调整类内和类间的相对大小时，学习不到决策边界，往往需要手动设置阈值。</p>
 <p>为解决上述问题，我们提出了用于UDA RSI分割的方法：深度协方差对齐（DCA:deep covariance alignment）。DCA模型可以通过对齐类别特征来学习从源域到目标域的共享域不变特征知识。其大致结构如下：</p>
@@ -187,75 +203,75 @@
 <h2 id="II-RELATED-WORK"><a href="#II-RELATED-WORK" class="headerlink" title="II. RELATED WORK"></a>II. RELATED WORK</h2><h3 id="A-UDA-RSI-Segmentation"><a href="#A-UDA-RSI-Segmentation" class="headerlink" title="A. UDA RSI Segmentation"></a>A. UDA RSI Segmentation</h3><p>目前的分割方法大致分为两类：ST和AT。ST方法的缺陷在于：难以训练，知识对齐不同域的分布，并没有提取不同域特征间的映射；AT方法的缺陷在于：易错伪标签会误导分类，造成错误累计，限制了ST方法的效率。</p>
 <p>以上的这些方法大多忽视了不同地理领域的地域风格不同。特别对于乡村和城市，土地覆盖的呈现形式十分不同，为了提高UDA RSI分割模型的泛化能力，LoveDA数据集被制作了出来。</p>
 <h3 id="B-Category-Alignment-Methods-in-UDA"><a href="#B-Category-Alignment-Methods-in-UDA" class="headerlink" title="B. Category Alignment Methods in UDA"></a>B. Category Alignment Methods in UDA</h3><p>基于生成对抗网络的AT方法，提出了隐式的类别对齐，但相比之下，一些显示的类别对齐表现更好。</p>
-<p>对于不同域间的相同类别的特征f1和f2，我们可以求二者之间的欧几里得距离：<br>$$<br>d(f1, f2) &#x3D; || f1 - f2||<br>$$<br>其中，|| ||表示欧几里德距离。</p>
-<p>然后，我们便可定义f1和f2之间的差异：<br>$$<br>L_{mse}(f1, f2) &#x3D; \frac{1}{N * N}\sum_{i}^{N}d(f^i_1, f^i_2)<br>$$<br>其中i代表不同域的第i个相同类别，N代表类别数量。由此，我们可以通过降低该损失来时类内特征。</p>
+<p>对于不同域间的相同类别的特征f1和f2，我们可以求二者之间的欧几里得距离：<br>$$<br>d(f1, f2) = || f1 - f2||<br>$$<br>其中，|| ||表示欧几里德距离。</p>
+<p>然后，我们便可定义f1和f2之间的差异：<br>$$<br>L_{mse}(f1, f2) = \frac{1}{N * N}\sum_{i}^{N}d(f^i_1, f^i_2)<br>$$<br>其中i代表不同域的第i个相同类别，N代表类别数量。由此，我们可以通过降低该损失来时类内特征。</p>
 <p>我们还可以定义三重损失，来衡量不同类别间特征的差异：</p>
-<img src = "https://i.imgur.com/8iw6GWu.png" height = '65'>
+<img src="https://i.imgur.com/8iw6GWu.png" height="65">
 
 <p>其中，alpha为预测边缘，需手动设置。通过这个损失，我们可以让类间特征分离。</p>
-<h2 id="III-PROPOSED-DCA-METHOD"><a href="#III-PROPOSED-DCA-METHOD" class="headerlink" title="III. PROPOSED DCA METHOD"></a>III. PROPOSED DCA METHOD</h2><h3 id="A-CFP-Module"><a href="#A-CFP-Module" class="headerlink" title="A. CFP Module"></a>A. CFP Module</h3><img src="https://i.imgur.com/aPyQXl8.png" style="zoom:50%;" />
+<h2 id="III-PROPOSED-DCA-METHOD"><a href="#III-PROPOSED-DCA-METHOD" class="headerlink" title="III. PROPOSED DCA METHOD"></a>III. PROPOSED DCA METHOD</h2><h3 id="A-CFP-Module"><a href="#A-CFP-Module" class="headerlink" title="A. CFP Module"></a>A. CFP Module</h3><img src="https://i.imgur.com/aPyQXl8.png" style="zoom:50%;">
 
 <p>我们使用Deeplab v2作为基础的分割模型，其编码器部分为ResNet50。</p>
 <p>同一类别的特征在特征空间中聚类，类别聚类的质心可以代表类别特征分布。因此，我们提出CFP模型，其通过粗操输出和深层特征方式来提取特征，如上图所示，输入一个图片X，提取到的深度特征为Enc(X)属于R^(C * H * W)，并且粗糙的输出一个分类Y’属于R^(N * H * W)，然后得到类别特征f属于R^(N * C),其计算如下：</p>
-<img src="https://i.imgur.com/3fGdL2X.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/3fGdL2X.png" style="zoom:50%;">
 
-<img src="https://i.imgur.com/WH2RQYM.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/WH2RQYM.png" style="zoom:50%;">
 
 <p>同样的，由CFP模型提取出来的类别特征f也代表类别特征的分布。值得注意的时f的计算只在一批图像中，而不是所有图像。并且，我们也不用标签Y来纠正类别特征f，因为Y’已经由真实标签Y来纠正。</p>
 <h3 id="B-Covariance-Regularization-CR"><a href="#B-Covariance-Regularization-CR" class="headerlink" title="B. Covariance Regularization (CR)"></a>B. Covariance Regularization (CR)</h3><h4 id="1-Motivations-of-CR"><a href="#1-Motivations-of-CR" class="headerlink" title="1)  Motivations of CR"></a>1)  Motivations of CR</h4><p>为了对齐类别特征，我们希望类内特征聚合以及类间特征分离，由CFP模型提取得到的两个特征f1和f2，我们可以通过提出的CR方法来对齐特征，其定义如下：</p>
-<img src="https://i.imgur.com/4KI60xL.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/4KI60xL.png" style="zoom:50%;">
 
 <p>其中delta_f1和delta_f2分别代表f1和f2的特征值,u_f1和u_f2分别代表f1和f2的方差，E代表期望函数，corr(f1,f2)构造了一个N * N的协方差矩阵来代表不同类别特征之间的关系，corr(f1, f2)也称线性相关函数，是马氏距离，而不是上述提到的欧氏距离。</p>
 <p>为了进一步说明CR模型，这里给出一个实验实例：</p>
-<img src="https://i.imgur.com/NFYN9ZC.png" style="zoom: 80%;" />
+<img src="https://i.imgur.com/NFYN9ZC.png" style="zoom: 80%;">
 
 <p>如图所示，我们分别用给用源域预训练好的网络输入两组源域的图片，通过CFP模型得到两组类别特征f1和f2，分别通过欧几里得距离和本文提出的协方差矩阵来进行特征对齐，其效果如图所示，我们发现CR可以有效的聚合类内特征，分离类间特征。</p>
-<img src="https://i.imgur.com/CHrlQnf.png" style="zoom:80%;" />
+<img src="https://i.imgur.com/CHrlQnf.png" style="zoom:80%;">
 
 <p>如上图所示，我们又给网络输入源域数据和目标域图片来计算协方差矩阵，源域和目标域之间的差异可以清楚的用协方差矩阵表示出来。并且，在协方差矩阵中，我们希望对角线的元素接近1，非对角线元素接近2，CR的表达式如下：</p>
-<img src="https://i.imgur.com/9bU9Pak.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/9bU9Pak.png" style="zoom:50%;">
 
 <p>其中，看着像“属于”的符号表示接近于0的数，避免在log运算中出现0的对数的情况。</p>
 <p>最后，我们将CR这种对齐方法与现有的方法MSE和 Triplet进行对比。</p>
- <img src="https://i.imgur.com/OKnU2OL.png" style="zoom: 50%;" />
+ <img src="https://i.imgur.com/OKnU2OL.png" style="zoom: 50%;">
 
-<p>其中，MSE方法无法对齐不同类别的特征；Triplet方法难以找到决策边界，需手动设置；相比之下，CR模型不仅可以对齐不同类别的特征，也省去了手动设置边界的步骤，因为当协方差为0时，便是一个天然的边界，当协方差&gt;0时，就是线性相关的，当协方差&lt;&#x3D;0时，就是不相关或负相关的。</p>
-<h4 id="2）Intradomain-CR-and-Cross-Domain-CR"><a href="#2）Intradomain-CR-and-Cross-Domain-CR" class="headerlink" title="2）Intradomain CR and Cross-Domain CR"></a>2）Intradomain CR and Cross-Domain CR</h4><img src = 'https://i.imgur.com/BpUMI4D.png'>
+<p>其中，MSE方法无法对齐不同类别的特征；Triplet方法难以找到决策边界，需手动设置；相比之下，CR模型不仅可以对齐不同类别的特征，也省去了手动设置边界的步骤，因为当协方差为0时，便是一个天然的边界，当协方差&gt;0时，就是线性相关的，当协方差&lt;=0时，就是不相关或负相关的。</p>
+<h4 id="2）Intradomain-CR-and-Cross-Domain-CR"><a href="#2）Intradomain-CR-and-Cross-Domain-CR" class="headerlink" title="2）Intradomain CR and Cross-Domain CR"></a>2）Intradomain CR and Cross-Domain CR</h4><img src="https://i.imgur.com/BpUMI4D.png">
 
 <p>对于域内类别特征对齐，我们有ICR，如上图（a）所示，给定一批图片，我们随机将其分为两组送入网络，利用CR来对两组类别特征进行正则化。受stop gradient的启发，我们使用停止梯度的方法保留coarse outputs部分的参数，防止其在方向传播的过程中更新参数，因为这部分的输出Y’受真实标签Y的监督，更加准确。损失表达式为：</p>
-<img src="https://i.imgur.com/Liv9qYm.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/Liv9qYm.png" style="zoom:50%;">
 
 <p>其中，f1^s 和 f2^s分别代表源域两组不同的类别特征。</p>
 <p>对于不同域类别特征对齐，我们有CCR，如上图（b）所示，两个域的粗糙输出和源域特征学习的梯度都被停止，因为源域的数据标签，更加可信准确，可以作为参考，将目标域和源域对齐。损失表达式为：</p>
-<img src="https://i.imgur.com/J4aosEG.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/J4aosEG.png" style="zoom:50%;">
 
 <p>其中fs和ft分别代表源域和目标域的类别特征。</p>
 <h3 id="C-Training-of-DCA"><a href="#C-Training-of-DCA" class="headerlink" title="C. Training of DCA"></a>C. Training of DCA</h3><p>与前述的ST方法类似，我们在训练DCA模型时采用阶梯式过程（stagewise procedure），逐步更新模型以减少误差。其具体过程如下图所示：</p>
-<img src="https://i.imgur.com/55SLlZ6.png" style="zoom:50%;" />
+<img src="https://i.imgur.com/55SLlZ6.png" style="zoom:50%;">
 
 <ul>
 <li><p>首先，在源域与训练分割模型，我们使用标准的交叉熵损失函数来作为监督：</p>
-  <img src="https://i.imgur.com/huJo0Aa.png" alt="image-20230706164642508" style="zoom:50%;" />
+  <img src="https://i.imgur.com/huJo0Aa.png" alt="image-20230706164642508" style="zoom:50%;">
 
-  <img src="https://i.imgur.com/uTEMSLO.png" style="zoom:50%;" />
+  <img src="https://i.imgur.com/uTEMSLO.png" style="zoom:50%;">
 </li>
 <li><p>同时，ICR用于对齐源域的类别特征。在每一步的开始，我们生成或更新一个伪标签Y_t^p来目标预测Y_t’，表达式如下：</p>
-  <img src="https://i.imgur.com/yGtImr4.png" alt="image-20230706165050800" style="zoom:50%;" />
+  <img src="https://i.imgur.com/yGtImr4.png" alt="image-20230706165050800" style="zoom:50%;">
 </li>
 <li><p>然后，我们用L_CE^s， L_CE^t，L_ICR，L_CCR在几个阶段中训练DCA模型：</p>
-  <img src="https://i.imgur.com/Nnv7hrU.png" alt="image-20230706165351624" style="zoom:50%;" /></li>
+  <img src="https://i.imgur.com/Nnv7hrU.png" alt="image-20230706165351624" style="zoom:50%;"></li>
 </ul>
-<h2 id="IV-RESULTS-OF-EXPERIMENTS"><a href="#IV-RESULTS-OF-EXPERIMENTS" class="headerlink" title="IV. RESULTS OF EXPERIMENTS"></a>IV. RESULTS OF EXPERIMENTS</h2><img src="https://i.imgur.com/WmF0HUG.png" alt="image-20230706165734700" style="zoom:50%;" />
+<h2 id="IV-RESULTS-OF-EXPERIMENTS"><a href="#IV-RESULTS-OF-EXPERIMENTS" class="headerlink" title="IV. RESULTS OF EXPERIMENTS"></a>IV. RESULTS OF EXPERIMENTS</h2><img src="https://i.imgur.com/WmF0HUG.png" alt="image-20230706165734700" style="zoom:50%;">
 
-<img src="https://i.imgur.com/K73zwax.png" alt="image-20230706165801726" style="zoom:50%;" />
+<img src="https://i.imgur.com/K73zwax.png" alt="image-20230706165801726" style="zoom:50%;">
 
-<img src="https://i.imgur.com/1i2tO1y.png" alt="image-20230706165828911" style="zoom:50%;" />
+<img src="https://i.imgur.com/1i2tO1y.png" alt="image-20230706165828911" style="zoom:50%;">
 
-<img src = "https://i.imgur.com/Vl6ZHnD.png">
+<img src="https://i.imgur.com/Vl6ZHnD.png">
 
 <h2 id="V-CONCLUSION"><a href="#V-CONCLUSION" class="headerlink" title="V. CONCLUSION"></a>V. CONCLUSION</h2><p>在这片文章中，我们提出了用于UDA RSI segmentation的DCA模型，其使用协方差正则化（CR）来聚合类内特征以及分离类间特征，显示地提取共享的域不变特征来增强模型的泛化能力。在LoveDA数据机所做的实验很好的证明了DCA的模型的良好表现。</p>
 <p>在未来，我们将探索用定量的实验来分心DCA结果的可视化和解释，并于其他方法比较。此外，我们将研究领域自适应任务在RSI图像分割中的熟练程度，并且进一步探索其他方法来提高分割性能。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">Ghost89757</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/a37e7948.html">https://ghost89757.github.io/post/a37e7948.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">Ghost89757</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">图像分割</a><a class="post-meta__tags" href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94/">无监督领域自适应</a></div><div class="post_share"><div class="social-share" data-image="/img/p12.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/f4aaaaf3.html"><img class="prev-cover" src="/img/p7.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Numpy总结-1.Numpy ndaay</div></div></a></div><div class="next-post pull-right"><a href="/post/37a338a6.html"><img class="next-cover" src="/img/%E9%A3%8E%E6%99%AF-5.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">U-Net总结</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/154c7ef1.html" title="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer"><img class="cover" src="/img/p11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-08</div><div class="title">3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer</div></div></a></div><div><a href="/post/1ab40edc.html" title="3D Conv:立体卷积"><img class="cover" src="/img/p15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">3D Conv:立体卷积</div></div></a></div><div><a href="/post/89b2e373.html" title="Attention：注意力机制"><img class="cover" src="/img/p17.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">Attention：注意力机制</div></div></a></div><div><a href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><img class="cover" src="/img/steam-27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割</div></div></a></div><div><a href="/post/e1675ab9.html" title="RNN:循环神经网络"><img class="cover" src="/img/p13.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">RNN:循环神经网络</div></div></a></div><div><a href="/post/e0d2147a.html" title="Transformer"><img class="cover" src="/img/p12.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">Transformer</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ghost89757</div><div class="author-info__description">且视他人之疑目如盏盏鬼火，大胆走你的夜路</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-number">1.</span> <span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-number">2.</span> <span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-RSI-Segmentation"><span class="toc-number">2.1.</span> <span class="toc-text">A. UDA RSI Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Category-Alignment-Methods-in-UDA"><span class="toc-number">2.2.</span> <span class="toc-text">B. Category Alignment Methods in UDA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-PROPOSED-DCA-METHOD"><span class="toc-number">3.</span> <span class="toc-text">III. PROPOSED DCA METHOD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-CFP-Module"><span class="toc-number">3.1.</span> <span class="toc-text">A. CFP Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Covariance-Regularization-CR"><span class="toc-number">3.2.</span> <span class="toc-text">B. Covariance Regularization (CR)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Motivations-of-CR"><span class="toc-number">3.2.1.</span> <span class="toc-text">1)  Motivations of CR</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89Intradomain-CR-and-Cross-Domain-CR"><span class="toc-number">3.2.2.</span> <span class="toc-text">2）Intradomain CR and Cross-Domain CR</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Training-of-DCA"><span class="toc-number">3.3.</span> <span class="toc-text">C. Training of DCA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-RESULTS-OF-EXPERIMENTS"><span class="toc-number">4.</span> <span class="toc-text">IV. RESULTS OF EXPERIMENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V-CONCLUSION"><span class="toc-number">5.</span> <span class="toc-text">V. CONCLUSION</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/63fbc417.html" title="无监督自适应（UDA）：让网络模型学会举一反三"><img src="/img/p7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无监督自适应（UDA）：让网络模型学会举一反三"/></a><div class="content"><a class="title" href="/post/63fbc417.html" title="无监督自适应（UDA）：让网络模型学会举一反三">无监督自适应（UDA）：让网络模型学会举一反三</a><time datetime="2023-07-14T08:07:47.000Z" title="发表于 2023-07-14 16:07:47">2023-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><img src="/img/steam-27.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"/></a><div class="content"><a class="title" href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割">MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割</a><time datetime="2023-07-12T03:18:15.000Z" title="发表于 2023-07-12 11:18:15">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/e0d2147a.html" title="Transformer"><img src="/img/p12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer"/></a><div class="content"><a class="title" href="/post/e0d2147a.html" title="Transformer">Transformer</a><time datetime="2023-07-12T01:05:43.000Z" title="发表于 2023-07-12 09:05:43">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/89b2e373.html" title="Attention：注意力机制"><img src="/img/p17.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Attention：注意力机制"/></a><div class="content"><a class="title" href="/post/89b2e373.html" title="Attention：注意力机制">Attention：注意力机制</a><time datetime="2023-07-12T00:47:35.000Z" title="发表于 2023-07-12 08:47:35">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/1ab40edc.html" title="3D Conv:立体卷积"><img src="/img/p15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="3D Conv:立体卷积"/></a><div class="content"><a class="title" href="/post/1ab40edc.html" title="3D Conv:立体卷积">3D Conv:立体卷积</a><time datetime="2023-07-11T14:01:28.000Z" title="发表于 2023-07-11 22:01:28">2023-07-11</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Ghost89757</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">Ghost89757</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/a37e7948.html">https://ghost89757.github.io/post/a37e7948.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">Ghost89757</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">图像分割</a><a class="post-meta__tags" href="/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94/">无监督领域自适应</a></div><div class="post_share"><div class="social-share" data-image="/img/p9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/f4aaaaf3.html"><img class="prev-cover" src="/img/p7.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Numpy总结-1.Numpy ndaay</div></div></a></div><div class="next-post pull-right"><a href="/post/37a338a6.html"><img class="next-cover" src="/img/p12.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">U-Net总结</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/154c7ef1.html" title="3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer"><img class="cover" src="/img/p12.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-08</div><div class="title">3D UX-Net：用于医学图像分割的大核体卷积现代化分层Transformer</div></div></a></div><div><a href="/post/1ab40edc.html" title="3D Conv:立体卷积"><img class="cover" src="/img/p11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">3D Conv:立体卷积</div></div></a></div><div><a href="/post/89b2e373.html" title="Attention：注意力机制"><img class="cover" src="/img/p9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">Attention：注意力机制</div></div></a></div><div><a href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><img class="cover" src="/img/p2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割</div></div></a></div><div><a href="/post/e1675ab9.html" title="RNN:循环神经网络"><img class="cover" src="/img/p9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-11</div><div class="title">RNN:循环神经网络</div></div></a></div><div><a href="/post/e0d2147a.html" title="Transformer"><img class="cover" src="/img/p7.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-12</div><div class="title">Transformer</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">Ghost89757</div><div class="author-info__description">且视他人之疑目如盏盏鬼火，大胆走你的夜路</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-INTRODUCTION"><span class="toc-text">I. INTRODUCTION</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#II-RELATED-WORK"><span class="toc-text">II. RELATED WORK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-UDA-RSI-Segmentation"><span class="toc-text">A. UDA RSI Segmentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Category-Alignment-Methods-in-UDA"><span class="toc-text">B. Category Alignment Methods in UDA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#III-PROPOSED-DCA-METHOD"><span class="toc-text">III. PROPOSED DCA METHOD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-CFP-Module"><span class="toc-text">A. CFP Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Covariance-Regularization-CR"><span class="toc-text">B. Covariance Regularization (CR)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Motivations-of-CR"><span class="toc-text">1)  Motivations of CR</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89Intradomain-CR-and-Cross-Domain-CR"><span class="toc-text">2）Intradomain CR and Cross-Domain CR</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Training-of-DCA"><span class="toc-text">C. Training of DCA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IV-RESULTS-OF-EXPERIMENTS"><span class="toc-text">IV. RESULTS OF EXPERIMENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V-CONCLUSION"><span class="toc-text">V. CONCLUSION</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/1ded95c1.html" title="王爽《汇编语言》总结"><img src="/img/p9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王爽《汇编语言》总结"></a><div class="content"><a class="title" href="/post/1ded95c1.html" title="王爽《汇编语言》总结">王爽《汇编语言》总结</a><time datetime="2023-10-01T00:47:48.000Z" title="发表于 2023-10-01 08:47:48">2023-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/63fbc417.html" title="无监督自适应（UDA）：让网络模型学会举一反三"><img src="/img/p12.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无监督自适应（UDA）：让网络模型学会举一反三"></a><div class="content"><a class="title" href="/post/63fbc417.html" title="无监督自适应（UDA）：让网络模型学会举一反三">无监督自适应（UDA）：让网络模型学会举一反三</a><time datetime="2023-07-14T08:07:47.000Z" title="发表于 2023-07-14 16:07:47">2023-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"><img src="/img/p2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割"></a><div class="content"><a class="title" href="/post/5b2f0628.html" title="MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割">MemoryAdaptNet：基于不变域级原型记忆的无监督领域自适应遥感语义分割</a><time datetime="2023-07-12T03:18:15.000Z" title="发表于 2023-07-12 11:18:15">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/e0d2147a.html" title="Transformer"><img src="/img/p7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Transformer"></a><div class="content"><a class="title" href="/post/e0d2147a.html" title="Transformer">Transformer</a><time datetime="2023-07-12T01:05:43.000Z" title="发表于 2023-07-12 09:05:43">2023-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/89b2e373.html" title="Attention：注意力机制"><img src="/img/p9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Attention：注意力机制"></a><div class="content"><a class="title" href="/post/89b2e373.html" title="Attention：注意力机制">Attention：注意力机制</a><time datetime="2023-07-12T00:47:35.000Z" title="发表于 2023-07-12 08:47:35">2023-07-12</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2022 - 2023 By Ghost89757</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
   window.MathJax = {
     tex: {
       inlineMath: [ ['$','$'], ["\\(","\\)"]],
@@ -299,8 +315,70 @@
   MathJax.startup.document.state(0)
   MathJax.texReset()
   MathJax.typeset()
-}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ghost89757.github.io/post/a37e7948.html'
+    this.page.identifier = '/post/a37e7948.html'
+    this.page.title = 'DCA：领域自适应遥感图像分割的深度协方差对齐'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
 POWERMODE.shake = true;
 POWERMODE.mobile = false;
 document.body.addEventListener('input', POWERMODE);
-</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
