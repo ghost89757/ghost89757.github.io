@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>哈工大OSNote2-操作系统的接口及其实现 | Ghost89757</title><meta name="author" content="Ghost89757,2779477538@qq.com"><meta name="copyright" content="Ghost89757"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="对应课程：  L4-操作系统接口 L5-系统调用的实现    1 操作系统接口是什么1.1 接口 日常生活中有很多接口，电源插座、汽车油门… 广义上的接口：连接两个东西、信号转换、屏蔽细节  1.2 用户如何使用计算机？ 用户通过三种方式使用计算机：命令行、图像按钮、应用程序 命令行通过命令程序来执行命令 图形界面通过消息框架程序和消息处理程序来处理用户触发的事件 总的来说，用户通过程序（应用软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈工大OSNote2-操作系统的接口及其实现">
+<meta property="og:url" content="https://ghost89757.github.io/post/9142525a.html">
+<meta property="og:site_name" content="Ghost89757">
+<meta property="og:description" content="对应课程：  L4-操作系统接口 L5-系统调用的实现    1 操作系统接口是什么1.1 接口 日常生活中有很多接口，电源插座、汽车油门… 广义上的接口：连接两个东西、信号转换、屏蔽细节  1.2 用户如何使用计算机？ 用户通过三种方式使用计算机：命令行、图像按钮、应用程序 命令行通过命令程序来执行命令 图形界面通过消息框架程序和消息处理程序来处理用户触发的事件 总的来说，用户通过程序（应用软件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ghost89757.github.io/img/1.jpg">
+<meta property="article:published_time" content="2023-10-10T10:48:03.000Z">
+<meta property="article:modified_time" content="2023-10-10T10:53:51.521Z">
+<meta property="article:author" content="Ghost89757">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ghost89757.github.io/img/1.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/9142525a"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '哈工大OSNote2-操作系统的接口及其实现',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-10 18:53:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><link rel="stylesheet" href="/css/modify.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ghost89757</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">哈工大OSNote2-操作系统的接口及其实现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-10T10:48:03.000Z" title="发表于 2023-10-10 18:48:03">2023-10-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-10T10:53:51.521Z" title="更新于 2023-10-10 18:53:51">2023-10-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%93%88%E5%B7%A5%E5%A4%A7%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">哈工大操作系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%93%88%E5%B7%A5%E5%A4%A7%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">操作系统笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="哈工大OSNote2-操作系统的接口及其实现"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url('/img/1.jpg');"></div><article class="post-content" id="article-container"><p>对应课程：</p>
+<ul>
+<li>L4-操作系统接口</li>
+<li>L5-系统调用的实现</li>
+</ul>
+<img src="https://i.imgur.com/Fb4uNs0.png" height="">
+
+<h2 id="1-操作系统接口是什么"><a href="#1-操作系统接口是什么" class="headerlink" title="1 操作系统接口是什么"></a>1 操作系统接口是什么</h2><h3 id="1-1-接口"><a href="#1-1-接口" class="headerlink" title="1.1 接口"></a>1.1 接口</h3><ul>
+<li>日常生活中有很多接口，电源插座、汽车油门…</li>
+<li>广义上的接口：<strong>连接两个东西、信号转换、屏蔽细节</strong></li>
+</ul>
+<h3 id="1-2-用户如何使用计算机？"><a href="#1-2-用户如何使用计算机？" class="headerlink" title="1.2 用户如何使用计算机？"></a>1.2 用户如何使用计算机？</h3><ul>
+<li>用户通过三种方式使用计算机：命令行、图像按钮、应用程序</li>
+<li>命令行通过命令程序来执行命令</li>
+<li>图形界面通过消息框架程序和消息处理程序来处理用户触发的事件</li>
+<li><strong>总的来说，用户通过程序（应用软件）来使用计算机</strong></li>
+</ul>
+<h3 id="1-3-操作系统接口"><a href="#1-3-操作系统接口" class="headerlink" title="1.3 操作系统接口"></a>1.3 操作系统接口</h3><ul>
+<li>操作系统接口通过C语言程序连接应用软件和操作系统，而这些C语言程序中包含一些重要的函数，如printf、open、close…</li>
+<li>这些重要的函数由操作系统来提供，这就是操作系统</li>
+<li><strong>接口表现为函数调用，又由系统提供，所以称为系统调用</strong></li>
+<li><strong>操作系统接口就是系统调用</strong></li>
+</ul>
+<h2 id="2-系统调用"><a href="#2-系统调用" class="headerlink" title="2 系统调用"></a>2 系统调用</h2><ul>
+<li>虽然都在内存中，但用户程序不能随意跳到系统内部，因为这存在安全隐患</li>
+<li>通过硬件设计来隔离用户程序和系统，以此防止用户程序随意访问内核</li>
+<li>若用户程序想访问内核，则需要通过中断进入内部</li>
+</ul>
+<h3 id="2-1-内核程序与用户程序的隔离"><a href="#2-1-内核程序与用户程序的隔离" class="headerlink" title="2.1 内核程序与用户程序的隔离"></a>2.1 内核程序与用户程序的隔离</h3><img src="https://i.imgur.com/MnPggW3.png" height="250">
+
+<ul>
+<li>通过一种处理器的硬件设计，将内存中的程序分为内核态和用户态</li>
+<li>不同段的程序，其特权等级不同，如图，数字越大，等级越低。特权等级高的程序段可以访问特权等级低的程序段</li>
+<li>当前程序段的特权等级值称为CPL，即CS段寄存器中段地址所指向的程序段的特权等级，其通过CS的最低两位来表示，0表示内核态，3表示用户态</li>
+<li>目的程序段的特权等级值称为DPL，即DS段寄存器中段地址所指向的程序段的特权等级</li>
+<li>只有$CPL &lt;= DPL$ 时，当前程序才可跳转到目标程序</li>
+<li>操作系统初始化时，会将内核的DPL置为0</li>
+</ul>
+<h3 id="2-2-用户程序进入内核的方法"><a href="#2-2-用户程序进入内核的方法" class="headerlink" title="2.2 用户程序进入内核的方法"></a>2.2 用户程序进入内核的方法</h3><ul>
+<li><p>对于Intex x86结构的PC机，用户程序通过中断指令 int 来调用进入内核，这也是唯一的方法</p>
+</li>
+<li><p>int 指令将CS中的CPL改成0，使可以进入内核</p>
+</li>
+<li><p>系统调用的核心：</p>
+<ul>
+<li>（1）用户程序中包含一段含 int 指令的代码</li>
+<li>（2）操作系统写中断处理，获取想调程序的编号</li>
+<li>（3）操作系统根据编号执行响应代码</li>
+</ul>
+</li>
+<li><p>系统调用的实现（以printf为例）</p>
+  <img src="https://i.imgur.com/o9DN3Nh.png" height="250"></li>
+</ul>
+<h2 id="3-系统调用的实现细节"><a href="#3-系统调用的实现细节" class="headerlink" title="3 系统调用的实现细节"></a>3 系统调用的实现细节</h2><p>以调用printf为例，看一下系统调用的细节</p>
+<img src="https://i.imgur.com/wCCVomu.png" height="200">
+
+<h3 id="3-1-printf展成int-0x80"><a href="#3-1-printf展成int-0x80" class="headerlink" title="3.1 printf展成int 0x80"></a>3.1 printf展成int 0x80</h3><ul>
+<li><p>当用户调用printf时，程序会调用库函数printf，库函数printf再调用库函数write</p>
+</li>
+<li><p>在<code>linux/lib/write.c</code>中，write的部分代码：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line">_syscall3(<span class="type">int</span>, write, <span class="type">int</span>, fd, <span class="type">const</span> <span class="type">char</span> *buf, <span class="type">off_t</span>, count)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>再库函数write中，我们可以看到wtite调用了函数<code>_syscall3</code> ，并且调用了头文件<code>unistd.h</code></p>
+</li>
+<li><p>在<code>linux/include/unistd.h</code>中，unistd的部分代码:</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _syscall3(type,name,atype,a,btype,b,ctype,c)\</span></span><br><span class="line"><span class="meta">type name(atype a, btype b, ctype c) \</span></span><br><span class="line"><span class="meta">{ </span></span><br><span class="line">	<span class="type">long</span> __res;\</span><br><span class="line">	__asm__ <span class="title function_">volatile</span><span class="params">(“<span class="type">int</span> <span class="number">0x80</span>”:”=a”(__res):””(__NR_##name),</span></span><br><span class="line"><span class="params">”b”((<span class="type">long</span>)(a)),”c”((<span class="type">long</span>)(b)),“d”((<span class="type">long</span>)(c)))</span>); </span><br><span class="line">	<span class="keyword">if</span>(__res&gt;=<span class="number">0</span>) <span class="keyword">return</span>(type)__res; </span><br><span class="line">	errno=-__res; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>  其中，<code>__NR_write</code>是系统调用号，放在eax中：<code>#define __NR_write 4 </code>。代码中包含了一段调用<code>int 0x80</code>中断的内嵌汇编代码，这段汇编中还传递了一些参数，包括参数<code>__NR_write</code></p>
+</li>
+<li><p>当程序执行到<code>unistd.h</code>中的内嵌汇编时，将使用<code>int 0x80</code>中断来进入内核</p>
+</li>
+</ul>
+<h3 id="3-2-设置int-0x80的中断处理"><a href="#3-2-设置int-0x80的中断处理" class="headerlink" title="3.2 设置int 0x80的中断处理"></a>3.2 设置int 0x80的中断处理</h3><ul>
+<li><p>CPU进入保护模式后，通过GDT寻址，通过IDT处理中断</p>
+</li>
+<li><p>上面，程序使用<code>int 0x80</code>中断，就需要设置相应的IDT处理中断</p>
+</li>
+<li><p>在开机的过程中，操作系统有一段初始化，就已经设置好了<code>int 0x80</code>的中断处理，其调用了函数<code>set_system_gate</code></p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">sched_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{ set_system_gate(<span class="number">0x80</span>,&amp;system_call); }</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>在<code>linux/include/asm/system.h</code>中，<code>set_system_gate</code>的部分代码：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> set_system_gate(n, addr) \</span></span><br><span class="line"><span class="meta">_set_gate(&amp;idt[n],15,3,addr); <span class="comment">//idt是中断向量表基址</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _set_gate(gate_addr, type, dpl, addr)\</span></span><br><span class="line"><span class="meta">__asm__(“movw %%dx,%%ax\n\t” “movw %0,%%dx\n\t”\</span></span><br><span class="line"><span class="meta">“movl %%eax,%1\n\t” “movl %%edx,%2”:\</span></span><br><span class="line"><span class="meta">:”i”((short)(0x8000+(dpl&lt;&lt;13)+type&lt;&lt;8))),“o”(*(( \</span></span><br><span class="line"><span class="meta">char*)(gate_addr))),”o”(*(4+(char*)(gate_addr))),\</span></span><br><span class="line"><span class="meta">“d”((char*)(addr),”a”(0x00080000))</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>  可以看到，这又是一段略显复杂的宏展开和汇编内嵌，最终设置的IDT表如下图所示，有趣的是，在参数传递中，dpl设为了3，就意味着，使用<code>int 0x80</code>中断的代码一定有权访问这个IDT表</p>
+</li>
+</ul>
+<img src="https://i.imgur.com/3Fy5rG1.png" height="80">
+
+<h3 id="3-3-中断处理程序：system-call"><a href="#3-3-中断处理程序：system-call" class="headerlink" title="3.3 中断处理程序：system_call"></a>3.3 中断处理程序：system_call</h3><ul>
+<li><p>中断<code>int 0x80</code>访问设置号的IDT表，找到相应的中断处理程序：<code>system_call</code></p>
+</li>
+<li><p>在<code>linux/kernel/system_call.s</code>中，<code>system_call</code>部分代码：</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">nr_system_calls=72</span><br><span class="line">.globl _system_call</span><br><span class="line">_system_call: cmpl $nr_system_calls-1,%eax</span><br><span class="line">ja bad_sys_call</span><br><span class="line">push %ds push %es push %fs</span><br><span class="line">pushl %edx pushl %ecx pushl %ebx //调用的参数</span><br><span class="line">movl $0x10,%edx mov %dx,%ds mov %dx,%es //内核数据</span><br><span class="line">movl $0x17,%edx mov %dx,%fs //fs可以找到用户数据</span><br><span class="line">call _sys_call_table(,%eax,4) //a(,%eax,4)=a+4*eax</span><br><span class="line">pushl %eax //返回值压栈，留着ret_from_sys_call时用</span><br><span class="line">... //其他代码</span><br><span class="line">ret_from_sys_call: popl %eax, 其他pop, iret</span><br></pre></td></tr></tbody></table></figure>
+
+<p>  可以看到，中断处理程序<code>system_call</code>又调用了<code>_sys_call_table(,%eax,4)</code>，而这就是我们最终想要的功能的函数入口，该入口就是一个地址，计算方式为<code>_sys_call_table+4*%eax</code>，其中eax存放的就是刚开始的系统调用号：<code>__NR_write</code>，<code>call _sys_call_table(,%eax,4)</code>就相当于<code>call sys_write</code>由此，程序将通过该入口，跳转到我们想要的功能的程序</p>
+</li>
+<li><p>在<code>include/linux/sys.h</code>中，<code>_sys_call_table</code>部分代码如下：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn_ptr sys_call_table[]=</span><br><span class="line">{sys_setup, sys_exit, sys_fork, sys_read, sys_write,</span><br><span class="line">...};</span><br></pre></td></tr></tbody></table></figure>
+
+<p>  在<code>include/linux/sched.h</code>中：<code>typedef int (fn_ptr*)();</code></p>
+</li>
+</ul>
+<p>图床：<a target="_blank" rel="noopener" href="https://imgur.com/a/GAadu4s">https://imgur.com/a/GAadu4s</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">Ghost89757</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/9142525a.html">https://ghost89757.github.io/post/9142525a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">Ghost89757</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a></div><div class="post_share"><div class="social-share" data-image="/img/1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/80a33e32.html"><img class="next-cover" src="/img/10.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">哈工大OSLab1-操作系统的引导</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/a0ab52d5.html" title="哈工大OSNote1-操作系统，启动！"><img class="cover" src="/img/9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-09</div><div class="title">哈工大OSNote1-操作系统，启动！</div></div></a></div><div><a href="/post/f357c59c.html" title="哈工大OSLab0-实验准备"><img class="cover" src="/img/8.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-08</div><div class="title">哈工大OSLab0-实验准备</div></div></a></div><div><a href="/post/80a33e32.html" title="哈工大OSLab1-操作系统的引导"><img class="cover" src="/img/10.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-10</div><div class="title">哈工大OSLab1-操作系统的引导</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">Ghost89757</div><div class="author-info__description">且视他人之疑目如盏盏鬼火，大胆走你的夜路</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">1 操作系统接口是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%8E%A5%E5%8F%A3"><span class="toc-text">1.1 接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%94%A8%E6%88%B7%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%EF%BC%9F"><span class="toc-text">1.2 用户如何使用计算机？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3"><span class="toc-text">1.3 操作系统接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text">2 系统调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E4%B8%8E%E7%94%A8%E6%88%B7%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%9A%94%E7%A6%BB"><span class="toc-text">2.1 内核程序与用户程序的隔离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%94%A8%E6%88%B7%E7%A8%8B%E5%BA%8F%E8%BF%9B%E5%85%A5%E5%86%85%E6%A0%B8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">2.2 用户程序进入内核的方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text">3 系统调用的实现细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-printf%E5%B1%95%E6%88%90int-0x80"><span class="toc-text">3.1 printf展成int 0x80</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%AE%BE%E7%BD%AEint-0x80%E7%9A%84%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-text">3.2 设置int 0x80的中断处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%EF%BC%9Asystem-call"><span class="toc-text">3.3 中断处理程序：system_call</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/9142525a.html" title="哈工大OSNote2-操作系统的接口及其实现"><img src="/img/1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSNote2-操作系统的接口及其实现"></a><div class="content"><a class="title" href="/post/9142525a.html" title="哈工大OSNote2-操作系统的接口及其实现">哈工大OSNote2-操作系统的接口及其实现</a><time datetime="2023-10-10T10:48:03.000Z" title="发表于 2023-10-10 18:48:03">2023-10-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/80a33e32.html" title="哈工大OSLab1-操作系统的引导"><img src="/img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSLab1-操作系统的引导"></a><div class="content"><a class="title" href="/post/80a33e32.html" title="哈工大OSLab1-操作系统的引导">哈工大OSLab1-操作系统的引导</a><time datetime="2023-10-10T01:48:54.000Z" title="发表于 2023-10-10 09:48:54">2023-10-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/a0ab52d5.html" title="哈工大OSNote1-操作系统，启动！"><img src="/img/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSNote1-操作系统，启动！"></a><div class="content"><a class="title" href="/post/a0ab52d5.html" title="哈工大OSNote1-操作系统，启动！">哈工大OSNote1-操作系统，启动！</a><time datetime="2023-10-09T02:12:54.000Z" title="发表于 2023-10-09 10:12:54">2023-10-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/f357c59c.html" title="哈工大OSLab0-实验准备"><img src="/img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSLab0-实验准备"></a><div class="content"><a class="title" href="/post/f357c59c.html" title="哈工大OSLab0-实验准备">哈工大OSLab0-实验准备</a><time datetime="2023-10-08T04:58:17.000Z" title="发表于 2023-10-08 12:58:17">2023-10-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/1ded95c1.html" title="王爽《汇编语言》总结"><img src="/img/7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王爽《汇编语言》总结"></a><div class="content"><a class="title" href="/post/1ded95c1.html" title="王爽《汇编语言》总结">王爽《汇编语言》总结</a><time datetime="2023-10-01T00:47:48.000Z" title="发表于 2023-10-01 08:47:48">2023-10-01</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2022 - 2023 By Ghost89757</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ghost89757.github.io/post/9142525a.html'
+    this.page.identifier = '/post/9142525a.html'
+    this.page.title = '哈工大OSNote2-操作系统的接口及其实现'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":180,"height":360,"hOffset":0,"vOffset":-45},"mobile":{"show":true},"react":{"opacity":1},"log":false});</script></body></html>
