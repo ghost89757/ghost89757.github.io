@@ -1,0 +1,469 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>哈工大OSNote6-进程同步与信号量 | Ghost89757</title><meta name="author" content="Ghost89757,2779477538@qq.com"><meta name="copyright" content="Ghost89757"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="对应课程：  L16-进程同步与信号量 L17-信号量临界区保护 L19-死锁处理  1 进程同步与信号量1.1 多进程合作问题  想象一下，一群人去坐大巴。大巴上有司机和售票员，司机负责大巴的操作，售票员负责开关门和售票，正常情况下，售票员开门售票，售完票关门，司机再发车。司机和售票员之间存在合作，才能保证大巴的合理运行。设想，司机和售票员没有合作，那么很可能，当售票员正开门售票时，大巴突然就向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈工大OSNote6-进程同步与信号量">
+<meta property="og:url" content="https://ghost89757.github.io/post/79d1dd43.html">
+<meta property="og:site_name" content="Ghost89757">
+<meta property="og:description" content="对应课程：  L16-进程同步与信号量 L17-信号量临界区保护 L19-死锁处理  1 进程同步与信号量1.1 多进程合作问题  想象一下，一群人去坐大巴。大巴上有司机和售票员，司机负责大巴的操作，售票员负责开关门和售票，正常情况下，售票员开门售票，售完票关门，司机再发车。司机和售票员之间存在合作，才能保证大巴的合理运行。设想，司机和售票员没有合作，那么很可能，当售票员正开门售票时，大巴突然就向">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ghost89757.github.io/img/7.jpg">
+<meta property="article:published_time" content="2023-10-30T05:48:22.000Z">
+<meta property="article:modified_time" content="2023-10-30T06:09:54.360Z">
+<meta property="article:author" content="Ghost89757">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ghost89757.github.io/img/7.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/79d1dd43"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '哈工大OSNote6-进程同步与信号量',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-30 14:09:54'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><link rel="stylesheet" href="/css/modify.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/7.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ghost89757</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">哈工大OSNote6-进程同步与信号量</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-30T05:48:22.000Z" title="发表于 2023-10-30 13:48:22">2023-10-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-30T06:09:54.360Z" title="更新于 2023-10-30 14:09:54">2023-10-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%93%88%E5%B7%A5%E5%A4%A7%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">哈工大操作系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%93%88%E5%B7%A5%E5%A4%A7%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">操作系统笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="哈工大OSNote6-进程同步与信号量"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url('/img/7.jpg');"></div><article class="post-content" id="article-container"><p>对应课程：</p>
+<ul>
+<li>L16-进程同步与信号量</li>
+<li>L17-信号量临界区保护</li>
+<li>L19-死锁处理</li>
+</ul>
+<h2 id="1-进程同步与信号量"><a href="#1-进程同步与信号量" class="headerlink" title="1 进程同步与信号量"></a>1 进程同步与信号量</h2><h3 id="1-1-多进程合作问题"><a href="#1-1-多进程合作问题" class="headerlink" title="1.1 多进程合作问题"></a>1.1 多进程合作问题</h3><img src="https://i.imgur.com/o9VO4r3.png" alt="image-20231025095608170" style="zoom:50%;">
+
+<p>想象一下，一群人去坐大巴。大巴上有司机和售票员，司机负责大巴的操作，售票员负责开关门和售票，正常情况下，售票员开门售票，售完票关门，司机再发车。司机和售票员之间存在合作，才能保证大巴的合理运行。设想，司机和售票员没有合作，那么很可能，当售票员正开门售票时，大巴突然就向前行驶了。</p>
+<p>司机和售票员分别就是一个进程，他们合作完成一个任务：大巴的合理运行。如何让多个进程之间相互合作，从而实现任务的合理有序进行呢？</p>
+<h3 id="1-2-生产者-消费者实例"><a href="#1-2-生产者-消费者实例" class="headerlink" title="1.2 生产者-消费者实例"></a>1.2 生产者-消费者实例</h3><img src="https://i.imgur.com/IixN6Xh.png" alt="image-20231025101107791" style="zoom:50%;">
+
+<p>假设有一段共享数据，可以让两个进程访问和修改，这段共享数据具体来说就是上图中的结构体数组：<code>buffer[BUFFER_SIZE]</code>-缓存区。两个进程分别为生产者进程和消费者进程。生产者进程负责在数组中的空闲位置添加元素，消费者则从数组中的非空闲位置拿走元素。当缓存区满了的时候，生产者进程应该停下来，不能继续在里边添加元素；当缓存区空的时候，消费者进程应该停下来，不能继续从里边拿走元素。</p>
+<p>要让两个进程合理运行，这两个进程就应该合作。生产者和消费者不可能都一直运行或一直等待，而是时而运行时而等待，进程同步就是要进程“走走停停”。</p>
+<img src="https://i.imgur.com/sVphVVB.png" alt="image-20231025103411861" style="zoom:50%;">
+
+<p>如上图所示，通过变量<code>counter</code>来判断缓存区的满或空，由此来决定进程是否运行或阻塞。对于生产者进程，当<code>counter == BUFFER_SIZE</code>时，缓存区满则停止运行，不满则<code>counter ++</code>，使得消费者可以使用资源；对于消费者进程，当<code>counter == 0</code>时，缓存区空则停止运行，不空则<code>counter --</code>，使得生产者可以继续生产者资源。</p>
+<p>这里，我们使用<code>counter</code>作为一个信号，来决定一个进程的唤醒或睡眠，但是这样存在一些问题。</p>
+<img src="https://i.imgur.com/Jn6deKx.png" alt="image-20231025104338856" style="zoom:50%;">
+
+<p>假设我们有两个生产者p1和p2，一个消费者c，此时缓存区已满，发生了以下情况：</p>
+<ol>
+<li>p1判断缓存区满，进入睡眠</li>
+<li>p2判断缓存区满，进入睡眠</li>
+<li>c判断缓存区非空，使用资源，<code>counter --</code>，判断<code>counter == BUFFER_SIZE - 1</code>，说明上一次缓存区满有生产者进程阻塞，唤醒了生产者p1</li>
+<li>c再次判断缓存区非空，使用资源，<code>counter --</code>，此时<code>counter = BUFFER_SIZE - 2</code>，有一个生产者进程p2还在等待，此时缓存区非满应当唤醒，但是消费者只在判断<code>counter == BUFFER_SIZE - 1</code>为真时，才会唤醒一个生产者就进程，因此生产者进程p2将无法唤醒</li>
+</ol>
+<h3 id="1-3-从信号到信号量"><a href="#1-3-从信号到信号量" class="headerlink" title="1.3 从信号到信号量"></a>1.3 从信号到信号量</h3><p>通过上面的生产者-消费者实例可以看到，仅仅通过一个信号来决定睡眠和唤醒，无法做到多进程同步，还应当记录下“有几个进程在等待”这种类似的信息。</p>
+<ul>
+<li>信号量：使用量来记录多进程中的一些信息，根据这些信息来发出响应的信号</li>
+<li>1965年，信号量最初是由荷兰学者Dijkstra提出的一种特殊整型变量，量用 来记录，信号用来sleep和wakeup</li>
+</ul>
+<p>在生产者-消费者问题中，做以下一些定义：</p>
+<ul>
+<li><p>信号量的代码定义：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">semaphore</span></span></span><br><span class="line"><span class="class">{</span></span><br><span class="line">	<span class="type">int</span> value; <span class="comment">//记录资源个数</span></span><br><span class="line">	PCB *<span class="built_in">queue</span>; <span class="comment">//记录等待在该信号量上的进程</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>消费资源：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">P (semaphore s) </span><br><span class="line">{</span><br><span class="line">	s.value --;</span><br><span class="line">	<span class="keyword">if</span> (s.value &lt; <span class="number">0</span>) <span class="comment">//当s.value = -1时说明上一次s.value = 0，睡眠进程队列</span></span><br><span class="line">		sleep (s.<span class="built_in">queue</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>生产资源：</p>
+  <figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">V (semaphore s)</span><br><span class="line">{</span><br><span class="line">	s.value ++;</span><br><span class="line">	<span class="keyword">if</span> (s.value &lt;= <span class="number">0</span>) <span class="comment">//当s.value = 0时说明上一次s.value = -1，唤醒进程队列</span></span><br><span class="line">		wake_up (s.<span class="built_in">queue</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>现在，我们用信号量和上面一的一些定义来解决生产者-消费者问题：</p>
+<p>用文件来定义共享缓冲区：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(“buffer.txt”);</span><br><span class="line">write(fd, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>)); <span class="comment">//写in</span></span><br><span class="line">write(fd, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>)); <span class="comment">//写out </span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>定义和初始化一些信号量：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">semaphore full = <span class="number">0</span>; <span class="comment">//表示缓冲区满的程度</span></span><br><span class="line">semaphore empty = BUFFER_SIZE; <span class="comment">//表示缓冲区空的程度</span></span><br><span class="line">semaphore mutex = <span class="number">1</span>; <span class="comment">//互斥量，值为1时可以使用缓存，置为0时不可使用缓存</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>生产者函数为：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Producer(item) </span><br><span class="line">{</span><br><span class="line">	P(empty);</span><br><span class="line">	P(mutex);</span><br><span class="line">	读入in;将item写入到in的位置上;</span><br><span class="line">	V(mutex);</span><br><span class="line">	V(full); </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>消费者函数为：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Consumer() </span><br><span class="line">{</span><br><span class="line">	P(full);</span><br><span class="line">	P(mutex);</span><br><span class="line">	读入out;从文件中的out位置读出到item;打印item;</span><br><span class="line">	V(mutex);</span><br><span class="line">	V(empty); </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+<h2 id="2-信号量临界区保护"><a href="#2-信号量临界区保护" class="headerlink" title="2 信号量临界区保护"></a>2 信号量临界区保护</h2><h3 id="2-1-共同修改信号量引出的问题"><a href="#2-1-共同修改信号量引出的问题" class="headerlink" title="2.1 共同修改信号量引出的问题"></a>2.1 共同修改信号量引出的问题</h3><img src="https://i.imgur.com/127AUpP.png" alt="image-20231026100713288" style="zoom:50%;">
+
+<p>还是生产者-消费者问题，如上图所示，假设有两个生产者P1和P2，初始时<code>empty = -1</code>，在经过两个进程后，理想的情况下<code>empty = -3</code>，但是由于进程调度可能如上图所示，实际的结果是<code>empty = -2</code>，这时就导致了“竞争条件”。</p>
+<ul>
+<li>竞争条件：和调度有关的共享数据语义错误</li>
+<li>错误由多个进程并发操作共享数据引起</li>
+<li>错误和调度顺序有关，难于发现和调试</li>
+</ul>
+<h3 id="2-2-解决竞争条件的直观想法"><a href="#2-2-解决竞争条件的直观想法" class="headerlink" title="2.2 解决竞争条件的直观想法"></a>2.2 解决竞争条件的直观想法</h3><img src="https://i.imgur.com/Jgbbe7b.png" alt="image-20231026101645713" style="zoom: 50%;">
+
+<ul>
+<li><p>这种直观想法就是给共享变量上锁：在一个进程访问共享变量时阻止其他进程访问，而这段修改共享变量的代码段，我们称之为“临界区”。</p>
+</li>
+<li><p>临界区：访问共享变量的代码片段，一定不能由多个进程同时执行</p>
+</li>
+<li><p>解决竞争条件问题，就需要保护临界区</p>
+</li>
+<li><p>保护临界区，就需要在进入和退出这段代码时做一些操作</p>
+</li>
+</ul>
+<img src="https://i.imgur.com/cG9TPsz.png" alt="image-20231026102154045" style="zoom:50%;">
+
+<ul>
+<li>临界区代码的保护原则：<ul>
+<li>互斥进入（基本原则）：一个进程在临界区执行时，其他进程不得进入</li>
+<li>有空让进：若干进程要求进入空闲临界区时，尽快让其中一个进程进入</li>
+<li>有限等待：进程发出进入临界区的请求，迟早都能进入临界区，不能无线等待</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-进入临界区的尝试"><a href="#2-3-进入临界区的尝试" class="headerlink" title="2.3 进入临界区的尝试"></a>2.3 进入临界区的尝试</h3><h4 id="2-3-1-轮换法"><a href="#2-3-1-轮换法" class="headerlink" title="2.3.1 轮换法"></a>2.3.1 轮换法</h4><img src="https://i.imgur.com/dJgKGmN.png" alt="image-20231026102817034" style="zoom:50%;">
+
+<ul>
+<li>满足互斥进入</li>
+<li>问题：不满足有空让进。假设进程$P_0$刚执行完，此时<code>turn = 1</code>，该进程$P_1$执行，但是$P_1$阻塞了，临界区空闲，但是由于<code>while (turn != 0) ;</code>，进程$P_0$ 也无法执行临界区</li>
+</ul>
+<h4 id="2-3-2-标记法"><a href="#2-3-2-标记法" class="headerlink" title="2.3.2 标记法"></a>2.3.2 标记法</h4><img src="https://i.imgur.com/HUYgn2k.png" alt="image-20231026103806264" style="zoom:50%;">
+
+<ul>
+<li><p>满足互斥进入</p>
+</li>
+<li><p>满足有空等待：假设此时进程$P_0$完成，<code>flag[0] = false</code>，该进程$P_1$进行，但进程$P_1$阻塞，但是由于循环条件判断<code>while (flag[1]) ;</code>，进程$P_0$仍可进入临界区</p>
+</li>
+<li><p>问题：无法满足有限等待</p>
+  <img src="https://i.imgur.com/zJBijfd.png" alt="image-20231026104409946" style="zoom:50%;"></li>
+</ul>
+<h4 id="2-3-3-非对称标记法"><a href="#2-3-3-非对称标记法" class="headerlink" title="2.3.3 非对称标记法"></a>2.3.3 非对称标记法</h4><img src="https://i.imgur.com/7LntBkx.png" alt="image-20231026104552476" style="zoom:50%;">
+
+<ul>
+<li>标记法使得每个进程动作都十分一致，打破这种对称可以避免标记法出现的尴尬局面</li>
+</ul>
+<h3 id="2-4-进入临界区的算法"><a href="#2-4-进入临界区的算法" class="headerlink" title="2.4 进入临界区的算法"></a>2.4 进入临界区的算法</h3><h4 id="2-4-1-Peterson算法"><a href="#2-4-1-Peterson算法" class="headerlink" title="2.4.1 Peterson算法"></a>2.4.1 Peterson算法</h4><img src="https://i.imgur.com/GQVbgx8.png" alt="image-20231026104932074" style="zoom:50%;">
+
+<ul>
+<li>结合了标记和轮转两种思想</li>
+<li>满足互斥进入：若两个进程都进入临界区，则<code>flag[0] = flag[1] = true</code>，<code>turn == 0 == 1</code>，矛盾</li>
+<li>满足有空让进：如果进程$P_1$不在临界区，则有<code>flag[1] = flase</code>或者<code>turn = 0</code>，进程$P_0$可以进入临界区</li>
+<li>满足有限等待：如果进程$P_0$要求进入临界区，而此时进程$P_1$正在执行，则在$P_1$执行后，<code>flag[1] = false</code>，进程$P_0$便会得到执行</li>
+</ul>
+<h4 id="2-4-2-面包店算法"><a href="#2-4-2-面包店算法" class="headerlink" title="2.4.2 面包店算法"></a>2.4.2 面包店算法</h4><img src="https://i.imgur.com/PBg0FHg.png" alt="image-20231026110402438" style="zoom:50%;">
+
+<ul>
+<li><p>多个进程，结合了标记和轮转的结合</p>
+</li>
+<li><p>轮转：每个进程都获得一个序号，序号最小的进入</p>
+</li>
+<li><p>标记：进程离开时序号为0，不为0的序号即标记</p>
+</li>
+<li><p>满足互斥进入</p>
+</li>
+<li><p>满足有空让进：当临界区空闲时，序号最小的进程一定能够进入</p>
+</li>
+<li><p>满足有限等待：来开临界区的进程再次请求进入时，重新分配的序号一定是最大的，所有进程符合先进先出的规则</p>
+</li>
+</ul>
+<h3 id="2-5-临界区保护的另一类解法"><a href="#2-5-临界区保护的另一类解法" class="headerlink" title="2.5 临界区保护的另一类解法"></a>2.5 临界区保护的另一类解法</h3><ul>
+<li>临界区只允许一个进程进入，防止其他进程进入</li>
+<li>只有其他进程不被调度就不会进入临界区，进程不被调度就可以停止中断</li>
+</ul>
+<img src="https://i.imgur.com/bckdBsK.png" alt="image-20231026111111227" style="zoom:50%;">
+
+<ul>
+<li><p>上如这种方法，只在单核CPU下有效，多核时仍然存在问题</p>
+</li>
+<li><p>通过一些硬件的方法，让进程在临界区执行时，以原子方式执行</p>
+</li>
+<li><p>原子方式：指令要么没运行，要么运行完成，没有中间状态</p>
+</li>
+<li><p>临界区保护的硬件原子指令法：<img src="https://i.imgur.com/UPa1LMm.png" alt="image-20231026111517152" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="3-死锁处理"><a href="#3-死锁处理" class="headerlink" title="3 死锁处理"></a>3 死锁处理</h2><p>我们仍然看生产者-消费者实例</p>
+<img src="https://i.imgur.com/4t8nwH0.png" alt="image-20231026113139725" style="zoom:50%;">
+
+<p>如上图所示，假如生产者和消费者函数中的<code>P()</code>语句前后调换，初始时，<code>mutex = 1</code>，<code>empty = 0</code>。生产者进程执行，执行<code>P (mutex)</code>后<code>mutex = 0</code>，执行<code>P (empty)</code>后<code>empty = -1</code>，睡眠进程；消费者进程执行，执行<code>P (mutex)</code>后<code>mutex = -1</code>，进程睡眠。此时，要执行生产者程序，就需要消费者继续执行<code>V ()</code>函数，者取决于<code>mutex = 0</code>，而修改<code>mutex</code>又取决于生产者自身，这就发生了“死锁”</p>
+<ul>
+<li>死锁：多个进程由于互相等待对方持有的资源而造成的谁都无法执行的情况</li>
+</ul>
+<h3 id="3-1-死锁分析"><a href="#3-1-死锁分析" class="headerlink" title="3.1 死锁分析"></a>3.1 死锁分析</h3><ul>
+<li>死锁的成因：<ul>
+<li>资源互斥使用，一旦占有别人无法使用</li>
+<li>进程占有了一些资源，又不释放，再去申请其他资源</li>
+<li>各自占有的资源和互相申请的资源形成了环路等待</li>
+</ul>
+</li>
+<li>死锁的4个必要条件<ul>
+<li>互斥使用</li>
+<li>不可抢占：资源只能等别的进程自愿放弃</li>
+<li>请求和保持：占有资源后再去申请其他资源</li>
+<li>循环等待</li>
+</ul>
+</li>
+<li>死锁处理方法概述：<ul>
+<li>死锁预防：破坏死锁出现的条件</li>
+<li>死锁避免：检测每个资源请求，如果造成死锁就拒绝</li>
+<li>死锁检测+恢复：检测到死锁出现时，让一些进程回滚，让出资源</li>
+<li>死锁忽略：忽略出现的死锁</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-死锁处理实例"><a href="#3-2-死锁处理实例" class="headerlink" title="3.2 死锁处理实例"></a>3.2 死锁处理实例</h3><h4 id="3-2-1-死锁预防"><a href="#3-2-1-死锁预防" class="headerlink" title="3.2.1 死锁预防"></a>3.2.1 死锁预防</h4><ul>
+<li>在进程执行前，一次性申请所有需要的资源</li>
+<li>对资源类型进行排序，资源申请必须按序进行</li>
+</ul>
+<p>两种方法都会造成资源浪费</p>
+<h4 id="3-2-2-死锁避免"><a href="#3-2-2-死锁避免" class="headerlink" title="3.2.2 死锁避免"></a>3.2.2 死锁避免</h4><ul>
+<li>安全序列：系统中所有进程存在一个可完成的执行序列</li>
+<li>银行家算法：<img src="https://i.imgur.com/RoZzEPe.png" alt="image-20231026115340008" style="zoom:50%;"></li>
+</ul>
+<h4 id="3-2-3-死锁检测-恢复"><a href="#3-2-3-死锁检测-恢复" class="headerlink" title="3.2.3 死锁检测+恢复"></a>3.2.3 死锁检测+恢复</h4><ul>
+<li>原因：使用银行家算法，每由一个请求都需预测死锁，每次耗时过大，效率低，发现问题在处理</li>
+<li>定时检测或发现资源利用率低时检测：<img src="https://i.imgur.com/hUak0NU.png" alt="image-20231026115556763" style="zoom:50%;"></li>
+</ul>
+<h4 id="3-2-4-死锁忽略"><a href="#3-2-4-死锁忽略" class="headerlink" title="3.2.4 死锁忽略"></a>3.2.4 死锁忽略</h4><ul>
+<li>死锁出现不是确定的，对于个人PC，前三种解决方法过于复杂，可以使用重启来处理死锁</li>
+</ul>
+<p>图床：<a target="_blank" rel="noopener" href="https://imgur.com/a/wm08yEG">https://imgur.com/a/wm08yEG</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">Ghost89757</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/79d1dd43.html">https://ghost89757.github.io/post/79d1dd43.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">Ghost89757</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a></div><div class="post_share"><div class="social-share" data-image="/img/7.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/b7d39bf9.html"><img class="prev-cover" src="/img/8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">哈工大OSLab4-信号量的实现和应用</div></div></a></div><div class="next-post pull-right"><a href="/post/4108bfd7.html"><img class="next-cover" src="/img/6.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">哈工大OSLab3-进程运行轨迹的跟踪与统计</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/a0ab52d5.html" title="哈工大OSNote1-操作系统，启动！"><img class="cover" src="/img/9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-09</div><div class="title">哈工大OSNote1-操作系统，启动！</div></div></a></div><div><a href="/post/9142525a.html" title="哈工大OSNote2-操作系统的接口及其实现"><img class="cover" src="/img/1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-10</div><div class="title">哈工大OSNote2-操作系统的接口及其实现</div></div></a></div><div><a href="/post/f5b9ea02.html" title="哈工大OSNote3-多进程图像"><img class="cover" src="/img/3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-16</div><div class="title">哈工大OSNote3-多进程图像</div></div></a></div><div><a href="/post/9f4d9f7b.html" title="哈工大OSNote4-线程及内核级线程的实现"><img class="cover" src="/img/4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-17</div><div class="title">哈工大OSNote4-线程及内核级线程的实现</div></div></a></div><div><a href="/post/2719452d.html" title="哈工大OSNote5-CPU调度策略"><img class="cover" src="/img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-21</div><div class="title">哈工大OSNote5-CPU调度策略</div></div></a></div><div><a href="/post/f357c59c.html" title="哈工大OSLab0-实验准备"><img class="cover" src="/img/8.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-08</div><div class="title">哈工大OSLab0-实验准备</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">Ghost89757</div><div class="author-info__description">吟啸且徐行，烟雨任平生</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-text">1 进程同步与信号量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%90%88%E4%BD%9C%E9%97%AE%E9%A2%98"><span class="toc-text">1.1 多进程合作问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E5%AE%9E%E4%BE%8B"><span class="toc-text">1.2 生产者-消费者实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%BB%8E%E4%BF%A1%E5%8F%B7%E5%88%B0%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-text">1.3 从信号到信号量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%A1%E5%8F%B7%E9%87%8F%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BF%9D%E6%8A%A4"><span class="toc-text">2 信号量临界区保护</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%85%B1%E5%90%8C%E4%BF%AE%E6%94%B9%E4%BF%A1%E5%8F%B7%E9%87%8F%E5%BC%95%E5%87%BA%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">2.1 共同修改信号量引出的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E5%86%B3%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6%E7%9A%84%E7%9B%B4%E8%A7%82%E6%83%B3%E6%B3%95"><span class="toc-text">2.2 解决竞争条件的直观想法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%BF%9B%E5%85%A5%E4%B8%B4%E7%95%8C%E5%8C%BA%E7%9A%84%E5%B0%9D%E8%AF%95"><span class="toc-text">2.3 进入临界区的尝试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-%E8%BD%AE%E6%8D%A2%E6%B3%95"><span class="toc-text">2.3.1 轮换法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="toc-text">2.3.2 标记法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-%E9%9D%9E%E5%AF%B9%E7%A7%B0%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="toc-text">2.3.3 非对称标记法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%BF%9B%E5%85%A5%E4%B8%B4%E7%95%8C%E5%8C%BA%E7%9A%84%E7%AE%97%E6%B3%95"><span class="toc-text">2.4 进入临界区的算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-1-Peterson%E7%AE%97%E6%B3%95"><span class="toc-text">2.4.1 Peterson算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-2-%E9%9D%A2%E5%8C%85%E5%BA%97%E7%AE%97%E6%B3%95"><span class="toc-text">2.4.2 面包店算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BF%9D%E6%8A%A4%E7%9A%84%E5%8F%A6%E4%B8%80%E7%B1%BB%E8%A7%A3%E6%B3%95"><span class="toc-text">2.5 临界区保护的另一类解法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%AD%BB%E9%94%81%E5%A4%84%E7%90%86"><span class="toc-text">3 死锁处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%AD%BB%E9%94%81%E5%88%86%E6%9E%90"><span class="toc-text">3.1 死锁分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%AD%BB%E9%94%81%E5%A4%84%E7%90%86%E5%AE%9E%E4%BE%8B"><span class="toc-text">3.2 死锁处理实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E6%AD%BB%E9%94%81%E9%A2%84%E9%98%B2"><span class="toc-text">3.2.1 死锁预防</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E6%AD%BB%E9%94%81%E9%81%BF%E5%85%8D"><span class="toc-text">3.2.2 死锁避免</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B-%E6%81%A2%E5%A4%8D"><span class="toc-text">3.2.3 死锁检测+恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-%E6%AD%BB%E9%94%81%E5%BF%BD%E7%95%A5"><span class="toc-text">3.2.4 死锁忽略</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/b7d39bf9.html" title="哈工大OSLab4-信号量的实现和应用"><img src="/img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSLab4-信号量的实现和应用"></a><div class="content"><a class="title" href="/post/b7d39bf9.html" title="哈工大OSLab4-信号量的实现和应用">哈工大OSLab4-信号量的实现和应用</a><time datetime="2023-10-30T05:49:34.000Z" title="发表于 2023-10-30 13:49:34">2023-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/79d1dd43.html" title="哈工大OSNote6-进程同步与信号量"><img src="/img/7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSNote6-进程同步与信号量"></a><div class="content"><a class="title" href="/post/79d1dd43.html" title="哈工大OSNote6-进程同步与信号量">哈工大OSNote6-进程同步与信号量</a><time datetime="2023-10-30T05:48:22.000Z" title="发表于 2023-10-30 13:48:22">2023-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4108bfd7.html" title="哈工大OSLab3-进程运行轨迹的跟踪与统计"><img src="/img/6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSLab3-进程运行轨迹的跟踪与统计"></a><div class="content"><a class="title" href="/post/4108bfd7.html" title="哈工大OSLab3-进程运行轨迹的跟踪与统计">哈工大OSLab3-进程运行轨迹的跟踪与统计</a><time datetime="2023-10-22T08:47:55.000Z" title="发表于 2023-10-22 16:47:55">2023-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2719452d.html" title="哈工大OSNote5-CPU调度策略"><img src="/img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSNote5-CPU调度策略"></a><div class="content"><a class="title" href="/post/2719452d.html" title="哈工大OSNote5-CPU调度策略">哈工大OSNote5-CPU调度策略</a><time datetime="2023-10-21T07:46:00.000Z" title="发表于 2023-10-21 15:46:00">2023-10-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/9f4d9f7b.html" title="哈工大OSNote4-线程及内核级线程的实现"><img src="/img/4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哈工大OSNote4-线程及内核级线程的实现"></a><div class="content"><a class="title" href="/post/9f4d9f7b.html" title="哈工大OSNote4-线程及内核级线程的实现">哈工大OSNote4-线程及内核级线程的实现</a><time datetime="2023-10-17T02:59:21.000Z" title="发表于 2023-10-17 10:59:21">2023-10-17</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2022 - 2023 By Ghost89757</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ghost89757.github.io/post/79d1dd43.html'
+    this.page.identifier = '/post/79d1dd43.html'
+    this.page.title = '哈工大OSNote6-进程同步与信号量'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":180,"height":360,"hOffset":0,"vOffset":-45},"mobile":{"show":true},"react":{"opacity":1},"log":false});</script></body></html>
