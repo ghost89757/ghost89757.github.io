@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>UnityNote6-动画系统 | loudmute</title><meta name="author" content="loudmute,2779477538@qq.com"><meta name="copyright" content="loudmute"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1 动画系统基本概念现代游戏动画系统的概念，简单介绍一下：  帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。 帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧/秒）”，也可以简称为“帧“ 帧间隔实践Time.deltaTime，当前帧与上一帧的实践差值   帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UnityNote6-动画系统">
+<meta property="og:url" content="https://ghost89757.github.io/post/24f9c4ae.html">
+<meta property="og:site_name" content="loudmute">
+<meta property="og:description" content="1 动画系统基本概念现代游戏动画系统的概念，简单介绍一下：  帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。 帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧/秒）”，也可以简称为“帧“ 帧间隔实践Time.deltaTime，当前帧与上一帧的实践差值   帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ghost89757.github.io/img/8.jpg">
+<meta property="article:published_time" content="2025-02-21T09:19:43.000Z">
+<meta property="article:modified_time" content="2025-02-21T09:28:46.156Z">
+<meta property="article:author" content="loudmute">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="游戏开发">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ghost89757.github.io/img/8.jpg"><link rel="shortcut icon" href="/img/cat-11.png"><link rel="canonical" href="https://ghost89757.github.io/post/24f9c4ae"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'UnityNote6-动画系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-21 17:28:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><link rel="stylesheet" href="/css/modify.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/head-1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/8.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">loudmute</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">UnityNote6-动画系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-21T09:19:43.000Z" title="发表于 2025-02-21 17:19:43">2025-02-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-21T09:28:46.156Z" title="更新于 2025-02-21 17:28:46">2025-02-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/Unity/">Unity</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="UnityNote6-动画系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url('/img/8.jpg');"></div><article class="post-content" id="article-container"><h2 id="1-动画系统基本概念"><a href="#1-动画系统基本概念" class="headerlink" title="1 动画系统基本概念"></a>1 动画系统基本概念</h2><p>现代游戏动画系统的概念，简单介绍一下：</p>
+<ul>
+<li>帧：计算机每次渲染完一幅图并并显示出来，这一幅图就是一帧。<ul>
+<li>帧率：连续的帧形成了动画，每秒刷新帧的次数称为帧率，单位是“FPS（Frames Per Second，帧/秒）”，也可以简称为“帧“</li>
+<li>帧间隔实践<code>Time.deltaTime</code>，当前帧与上一帧的实践差值</li>
+</ul>
+</li>
+<li>帧动画：一种动画技术，事先准备好每一帧的画面，然后依次播放。简单直接，但工作量大，存储空间也大。</li>
+<li>2D/3D骨骼动画：人物模型会绑定一个骨架，每一段骨骼关联人物模型的一部分，移动和旋转骨架，人物也会跟着做各种动作。节省工作量和存储空间。</li>
+<li>动画融合：通过插值等技术，自动计算不同动作状态之间的过渡状态，使得状态转换的自然。</li>
+<li>动画状态机：表示了各种动画状态间的联系以及转换逻辑。</li>
+</ul>
+<h2 id="2-2D动画实例分析"><a href="#2-2D动画实例分析" class="headerlink" title="2 2D动画实例分析"></a>2 2D动画实例分析</h2><h3 id="2-1-素材准备"><a href="#2-1-素材准备" class="headerlink" title="2.1 素材准备"></a>2.1 素材准备</h3><p>现在的商场里找不到Standard Assets了，苦了我这个菜鸟小白呀&gt;^&lt;，找了好久才发现已经下架了，好在还可以下载，放个链接：<a target="_blank" rel="noopener" href="https://download.unity3d.com/download_unity/a6cc294b73ee/WindowsStandardAssetsInstaller/UnityStandardAssetsSetup.exe">https://download.unity3d.com/download_unity/a6cc294b73ee/WindowsStandardAssetsInstaller/UnityStandardAssetsSetup.exe</a></p>
+<h4 id="2-1-1-资源导入与整理"><a href="#2-1-1-资源导入与整理" class="headerlink" title="2.1.1 资源导入与整理"></a>2.1.1 资源导入与整理</h4><p><strong>导入资源</strong></p>
+<p>在窗口Project -&gt; Assets文件夹下，导入本地已经下载好的资源包Standard Assets -&gt; 2D.unitypackage</p>
+<p><strong>整理资源</strong></p>
+<ul>
+<li>Project -&gt; Assets文件夹下，创建Resources文件夹</li>
+<li>Resources文件下，创建anims和sprites文件夹，分别存放动画资源和图片资源</li>
+<li>Assets/Standard Assets/2D/sprites文件下，PlatformWhiteSprite.png文件和所有Robot开头的png图片文件，复制Assets/Resources/sprites文件夹</li>
+</ul>
+<h4 id="2-1-2-图片设置"><a href="#2-1-2-图片设置" class="headerlink" title="2.1.2 图片设置"></a>2.1.2 图片设置</h4><ul>
+<li><strong>参数设置</strong>：<ul>
+<li>Texture Type（贴图类型）：Sprite（2D and UI），即2D精灵图片</li>
+<li>Sprite Mode（精灵模式）：（1）Single，一张图片文件里只有一张图（2）Multiple，一张图片文件里有多张图</li>
+<li>这里除了PlatformWhiteSprite.png是单图，其他图片文件均为多图</li>
+<li>Pixels Per Unit（像素与图片大小的比例）：默认100，即100像素对应场景中的1米</li>
+<li>单击Apply，是设置生效</li>
+</ul>
+</li>
+<li>批量选中图片：按住Ctrl/Shift键</li>
+<li><strong>多图模式切割</strong><ul>
+<li>编辑器菜单栏Window -&gt; Package Manager -&gt; 左上角加号后边选择Packages: Unity Registry，找到2D Sprite并安装</li>
+<li>选中图片，点击Sprite Editor，打开精灵编辑器</li>
+<li>常用功能Slice（切割），3种类型：Auto（自动）、Grid By Cell Size（根据图片大小划分网格）和Grid By Cell Count（根据行数列数划分网格）</li>
+<li>这里我们选用第二种类型，切割大小设置为275像素*275像素</li>
+<li>点击Apply，使设置生效</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-场景搭建与角色控制"><a href="#2-2-场景搭建与角色控制" class="headerlink" title="2.2 场景搭建与角色控制"></a>2.2 场景搭建与角色控制</h3><h4 id="2-2-1-场景搭建"><a href="#2-2-1-场景搭建" class="headerlink" title="2.2.1 场景搭建"></a>2.2.1 场景搭建</h4><img src="https://i.imgur.com/8ife9cC.png" alt="image-20250221162417072" style="zoom: 25%;">
+
+<ul>
+<li><strong>新建场景</strong>：编辑器菜单栏File -&gt; New Scene，保存并命名为Test2DAnim：File -&gt; Save As，单击场景窗口2D按钮，切换到2D视角</li>
+<li><strong>地板搭建</strong>：使用PlatformWhiteSprite图片，添加Box Collider 2D组件，并适当调整，做成预制体存放于Resources/prefabs文件夹下</li>
+<li><strong>玩家Player</strong>：使用RobotBoyIdleSprite切割好的任意图片<ul>
+<li>找到切割好的图片：Resources/sprites/RobotBoyidelSprite，点开类似于播放的小三角按钮</li>
+<li>添加Rigidbody2D组件，勾选Constraints选项中的Freeze Rotation Z选项，避免玩家跌倒</li>
+<li>添加Capsule Collider 2D组件，点击Edit Collider调整胶囊形状，胶囊体要比人物略小、左右对称、脚部对准</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-2-角色控制"><a href="#2-2-2-角色控制" class="headerlink" title="2.2.2 角色控制"></a>2.2.2 角色控制</h4><p>对玩家Player进行操作：</p>
+<ul>
+<li>添加资源自带的通用控制角色运动脚本，Platformer Character 2D</li>
+<li>添加资源自带的输入脚本（键盘、手柄等输入），Platformer 2D User Control</li>
+<li>指定角色脚本的应用<ul>
+<li>添加Animator组件，并在Resources/anims文件下新建一个Animator Controller文件，放入Animator组件的Controller一栏</li>
+<li>创建一个名为GroundCheck的子物体，放于玩家脚下，用于地面检测</li>
+<li>在角色脚本Platformer Character 2D中，What Is Ground选项，默认是Nothing（没有），将它改为Everything</li>
+</ul>
+</li>
+</ul>
+<p>至此，玩家可以进行左右移动。</p>
+<h3 id="2-3-动画的制作步骤"><a href="#2-3-动画的制作步骤" class="headerlink" title="2.3 动画的制作步骤"></a>2.3 动画的制作步骤</h3><p>为角色加上动画，总的步骤分为3步：</p>
+<ul>
+<li>编辑动画：把素材中的图片串联起来，形成动画</li>
+<li>编辑动画状态机：把编辑好的动画，通过Animator有机结合起来，可以转换状态</li>
+<li>设置动画变量</li>
+</ul>
+<h4 id="2-3-1编辑动画"><a href="#2-3-1编辑动画" class="headerlink" title="2.3.1编辑动画"></a>2.3.1<strong>编辑动画</strong></h4><ul>
+<li><strong>打开Animation窗口</strong>：编辑器菜单栏Window→Animation→Animation</li>
+<li><strong>创建动画文件</strong>：选中Player，在Animation窗口点击Create，自定义路径和文件名，如Resources/anims/Idel.anim，做站立动画。注意，Animation窗口播放的是当前选中物体的动画。</li>
+<li><strong>放入动画素材</strong>：将Project窗口中，找到文件夹Assets/Resources/sprites/RobotBoyIdelSprite，将该文件夹下的所有分割好的图片拖拽到Animation拖拽到Animation窗口中，即可自动形成动画序列</li>
+<li><strong>更改动画播放速率</strong>：Animation窗口的Samples（采样率、速率）参数，默认60，可适当更改</li>
+<li><strong>播放动画</strong>：选中Player，点击播放按钮，即可播放；点击左右短箭头，也可以在场景中预览</li>
+</ul>
+<p>由以上步骤，可以得到玩家的walk、run、jump等动画动作，到了这里我挺激动的，太兴奋辣~</p>
+<img src="https://i.imgur.com/tMe42lL.gif" alt="2danimtest-1" style="zoom: 25%;">
+
+<h4 id="2-3-2-编辑动画状态机"><a href="#2-3-2-编辑动画状态机" class="headerlink" title="2.3.2 编辑动画状态机"></a>2.3.2 <strong>编辑动画状态机</strong></h4><ul>
+<li><strong>打开Animator窗口</strong>：编辑器菜单栏Window→Animation→Animator</li>
+<li><strong>增删状态</strong>：选中Player，Animator窗口中已有几个自动添加的新状态，通过右键状态或这拖拽动画文件，可以进行状态的增删。</li>
+<li><strong>状态连接</strong>：通过右键一个状态选择Make Transition即可创建一个到下一状态的箭头。</li>
+<li><strong>动画状态机中的状态</strong>：Entry是初始状态，是入口，其连接的第一个状态时默认状态;Any State时任意状态</li>
+</ul>
+<p>经过操作，可以得到一个状态机：</p>
+<img src="https://i.imgur.com/DYEThKe.png" alt="image-20250221162218987" style="zoom:50%;">
+
+<h4 id="2-3-3-设置动画变量"><a href="#2-3-3-设置动画变量" class="headerlink" title="2.3.3 设置动画变量"></a>2.3.3 <strong>设置动画变量</strong></h4><p>有了状态转移图（动画状态机），我们该考虑状态之间的转换逻辑，即箭头的问题。</p>
+<ul>
+<li><p><strong>增加动画变量</strong>：在Animator窗口左上角，Paraments-&gt;在点小加号，即可增添不同类型的变量以及设置变量值</p>
+  <img src="https://i.imgur.com/bjX5i3C.png" alt="image-20250221163532352" style="zoom: 50%;">
+</li>
+<li><p><strong>设置过度逻辑</strong>：单击箭头，即可查看一状态到另一状态的转移信息。如下如所示，我们在增设了动画变量后，可以在Conditions中看到变量的有关信息，通过速度是否高于或低于0.2，0.01，我们可以实现站立、走、跑三种状态之间的转移逻辑；通过是否碰到地面，可以实现跳跃、站立、任意状态三者之前的转移逻辑。</p>
+  <img src="https://i.imgur.com/blyYMJ0.png" alt="image-20250221163301559" style="zoom: 50%;"></li>
+</ul>
+<p>至此，我们的角色在移动时有了动画动作。但是，实际运行时发现，延迟很高，这就涉及到了动画过渡。</p>
+<h4 id="2-3-4-动画过渡"><a href="#2-3-4-动画过渡" class="headerlink" title="2.3.4 动画过渡"></a>2.3.4 动画过渡</h4><img src="https://i.imgur.com/A0KgHQo.png" alt="image-20250221164523208" style="zoom:50%;">
+
+<p>如图，是一个动画状态转移信息，关于时间的参数有两部分：</p>
+<ul>
+<li>Exit Time（退出时间），指切换到其他动画前，基于播放一段当前动画所用的时间。常用于不可中断的动画，如攻击收招、拔枪等动作。</li>
+<li>Transition Duration（状态转换时间），指从状态A切换到状态B的叠加状态时间，从上图可直观看出。用于动作的完美过渡，如真实的3D动作游戏，玩家的动作切换。</li>
+</ul>
+<p>但是我们现在的2D动画这两种设置所带来的效果，取消勾选图中的Has Exit Time，让这两部分置为0即可。</p>
+<p>至此，我们可以得到一个无延迟的动画转换。</p>
+<img src="https://i.imgur.com/YDtXqO8.gif" alt="2danimtest-2" style="zoom:50%;">
+
+
+
+<p>不足的是，我们使用导入的资源，完全写好了脚本，无法自己动手实现一个，需要自己再找个项目练一练手，以便体验脚本在动画方面的使用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io">loudmute</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ghost89757.github.io/post/24f9c4ae.html">https://ghost89757.github.io/post/24f9c4ae.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ghost89757.github.io" target="_blank">loudmute</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a><a class="post-meta__tags" href="/tags/C/">C#</a></div><div class="post_share"><div class="social-share" data-image="/img/8.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/e422cb2d.html"><img class="next-cover" src="/img/7.jpg" onerror="onerror=null;src='/img/p6.png'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">UnityNote5-UI系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/9fcb3586.html" title="UnityNote1-初识Unity"><img class="cover" src="/img/3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-17</div><div class="title">UnityNote1-初识Unity</div></div></a></div><div><a href="/post/27a89f23.html" title="UnityNote2-基本概念和脚本编程"><img class="cover" src="/img/4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-05</div><div class="title">UnityNote2-基本概念和脚本编程</div></div></a></div><div><a href="/post/77bff30b.html" title="UnityNote3-物理系统"><img class="cover" src="/img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-08</div><div class="title">UnityNote3-物理系统</div></div></a></div><div><a href="/post/c5634d79.html" title="UnityNote4-数学基础"><img class="cover" src="/img/6.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-11</div><div class="title">UnityNote4-数学基础</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/head-1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">loudmute</div><div class="author-info__description">一直游到，海水变蓝</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ghost89757"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">1 动画系统基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2D%E5%8A%A8%E7%94%BB%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-text">2 2D动画实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%B4%A0%E6%9D%90%E5%87%86%E5%A4%87"><span class="toc-text">2.1 素材准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E8%B5%84%E6%BA%90%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%95%B4%E7%90%86"><span class="toc-text">2.1.1 资源导入与整理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E5%9B%BE%E7%89%87%E8%AE%BE%E7%BD%AE"><span class="toc-text">2.1.2 图片设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA%E4%B8%8E%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-text">2.2 场景搭建与角色控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E5%9C%BA%E6%99%AF%E6%90%AD%E5%BB%BA"><span class="toc-text">2.2.1 场景搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E8%A7%92%E8%89%B2%E6%8E%A7%E5%88%B6"><span class="toc-text">2.2.2 角色控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%8A%A8%E7%94%BB%E7%9A%84%E5%88%B6%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-text">2.3 动画的制作步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB"><span class="toc-text">2.3.1编辑动画</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E7%BC%96%E8%BE%91%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-text">2.3.2 编辑动画状态机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-%E8%AE%BE%E7%BD%AE%E5%8A%A8%E7%94%BB%E5%8F%98%E9%87%8F"><span class="toc-text">2.3.3 设置动画变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-%E5%8A%A8%E7%94%BB%E8%BF%87%E6%B8%A1"><span class="toc-text">2.3.4 动画过渡</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/24f9c4ae.html" title="UnityNote6-动画系统">UnityNote6-动画系统</a><time datetime="2025-02-21T09:19:43.000Z" title="发表于 2025-02-21 17:19:43">2025-02-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/e422cb2d.html" title="UnityNote5-UI系统">UnityNote5-UI系统</a><time datetime="2025-02-20T02:50:00.000Z" title="发表于 2025-02-20 10:50:00">2025-02-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/c5634d79.html" title="UnityNote4-数学基础">UnityNote4-数学基础</a><time datetime="2025-02-11T13:52:45.000Z" title="发表于 2025-02-11 21:52:45">2025-02-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/77bff30b.html" title="UnityNote3-物理系统">UnityNote3-物理系统</a><time datetime="2025-02-08T10:08:29.000Z" title="发表于 2025-02-08 18:08:29">2025-02-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/27a89f23.html" title="UnityNote2-基本概念和脚本编程">UnityNote2-基本概念和脚本编程</a><time datetime="2025-02-05T13:45:47.000Z" title="发表于 2025-02-05 21:45:47">2025-02-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">©2022 - 2025 By loudmute</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ghost89757.github.io/post/24f9c4ae.html'
+    this.page.identifier = '/post/24f9c4ae.html'
+    this.page.title = 'UnityNote6-动画系统'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+
+  document.getElementById('darkmode').addEventListener('click', () => {
+    setTimeout(() => window.disqusReset(), 200)
+  })
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":120,"height":240,"hOffset":0,"vOffset":-45},"mobile":{"show":true},"react":{"opacity":1},"log":false});</script></body></html>
